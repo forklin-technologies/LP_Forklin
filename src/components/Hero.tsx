@@ -17,7 +17,7 @@ export default function Hero() {
       />
 
       <div className="relative mx-auto flex max-w-4xl flex-col items-center text-center">
-        <p className="mb-5 text-lg italic text-[var(--ink-soft)] sm:text-xl">
+        <p className="mb-5 text-xl italic text-[var(--ink-soft)] sm:text-2xl">
           Um ecossistema, várias soluções
         </p>
         <h1 className="text-balance text-5xl font-extrabold leading-[1.1] tracking-tight text-[var(--ink)] sm:text-6xl md:text-7xl">
@@ -26,7 +26,7 @@ export default function Hero() {
           Cresça com a{" "}
           <span className="text-[var(--btn-primary)]">Forklin.</span>
         </h1>
-        <p className="mt-6 max-w-xl text-balance text-lg text-[var(--ink-soft)] sm:text-xl">
+        <p className="mt-6 max-w-xl text-balance text-lg text-[var(--ink-soft)] opacity-70 sm:text-xl">
           Desenvolvemos sistemas e produtos digitais que transformam ideias em
           resultados reais.
         </p>
