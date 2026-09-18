@@ -20,7 +20,7 @@ export default function ContactCTA() {
   }, []);
 
   return (
-    <section className="relative bg-[var(--surface)] px-6 pb-24 pt-16 text-center sm:px-10 sm:pb-32 sm:pt-20">
+    <section className="relative bg-[var(--surface)] px-6 pb-24 pt-16 text-center sm:px-10 sm:pb-32 sm:pt-24">
       <div
         ref={sectionRef}
         className={`mx-auto max-w-4xl transition-all duration-700 ease-out ${

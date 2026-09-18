@@ -38,7 +38,7 @@ export default function Solutions() {
   return (
     <section
       id="solucoes"
-      className="relative overflow-hidden bg-[var(--surface)] px-6 pb-10 pt-10 sm:px-10 sm:pb-14 sm:pt-14"
+      className="relative overflow-hidden bg-[var(--surface)] px-6 pb-16 pt-16 sm:px-10 sm:pb-24 sm:pt-24"
     >
       <Image
         src="/images/hero-network.png"
@@ -51,7 +51,7 @@ export default function Solutions() {
 
       <div
         ref={sectionRef}
-        className="relative mx-auto grid max-w-7xl gap-16 lg:grid-cols-[0.85fr_1.5fr] lg:items-center lg:gap-14"
+        className="relative mx-auto grid max-w-7xl gap-16 lg:grid-cols-[0.75fr_1.6fr] lg:items-center lg:gap-14"
       >
         {/* Texto */}
         <div
@@ -63,7 +63,7 @@ export default function Solutions() {
             Soluções
           </span>
 
-          <h2 className="mt-6 text-balance text-4xl font-bold italic leading-tight sm:text-5xl">
+          <h2 className="mt-6 text-balance text-5xl font-bold italic leading-tight sm:text-6xl">
             <span className="text-[var(--ink)]">Da ideia ao produto,</span>
             <br />
             <span className="text-[var(--btn-primary)]">
@@ -71,14 +71,14 @@ export default function Solutions() {
             </span>
           </h2>
 
-          <p className="mt-6 max-w-md text-lg text-[var(--ink-soft)]">
+          <p className="mt-6 max-w-md text-xl text-[var(--ink-soft)]">
             O Diário Digital nasceu de um problema real de gestão escolar.
             Hoje roda em produção, com chamada, calendário e histórico de
             alunos centralizados em um só lugar.
           </p>
 
           <div className="mt-8 flex max-w-lg items-center gap-3 rounded-full bg-[#38BDF8] p-1.5 pl-6 shadow-lg">
-            <p className="flex-1 text-left text-sm font-medium leading-snug text-white">
+            <p className="flex-1 text-left text-base font-medium leading-snug text-white">
               Personalização, desenvolvimento e suporte aplicados a um
               produto real.
             </p>

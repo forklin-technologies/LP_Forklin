@@ -4,7 +4,7 @@ export default function Hero() {
   return (
     <section
       id="top"
-      className="relative overflow-hidden bg-[var(--surface)] px-6 pb-10 pt-28 sm:px-10 sm:pb-14 sm:pt-36"
+      className="relative overflow-hidden bg-[var(--surface)] px-6 pb-20 pt-28 sm:px-10 sm:pb-28 sm:pt-36"
     >
       <Image
         src="/images/hero-network.png"
@@ -20,11 +20,14 @@ export default function Hero() {
         <p className="mb-5 text-xl italic text-[var(--ink-soft)] sm:text-2xl">
           Um ecossistema, várias soluções
         </p>
-        <h1 className="text-balance text-5xl font-extrabold leading-[1.1] tracking-tight text-[var(--ink)] sm:text-6xl md:text-7xl">
-          Seu ecossistema.
-          <br />
-          Cresça com a{" "}
-          <span className="text-[var(--btn-primary)]">Forklin.</span>
+        <h1 className="font-extrabold leading-[1.1] tracking-tight text-[var(--ink)]">
+          <span className="block whitespace-nowrap text-[clamp(1.75rem,6.5vw,5rem)]">
+            Seu ecossistema.
+          </span>
+          <span className="block whitespace-nowrap text-[clamp(1.75rem,6.5vw,5rem)]">
+            Cresça com a{" "}
+            <span className="text-[var(--btn-primary)]">Forklin.</span>
+          </span>
         </h1>
         <p className="mt-6 max-w-xl text-balance text-lg text-[var(--ink-soft)] opacity-70 sm:text-xl">
           Desenvolvemos sistemas e produtos digitais que transformam ideias em

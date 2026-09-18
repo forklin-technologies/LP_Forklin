@@ -131,9 +131,17 @@ const CARDS = [
   },
 ];
 
+const HEADING_LINE_1 = "Conhecimento em";
+const HEADING_LINE_2 = "movimento.";
+const HEADING_LENGTH = HEADING_LINE_1.length + HEADING_LINE_2.length;
+const TYPE_SPEED_MS = 70;
+
 export default function EcosystemCards() {
   const rowRef = useRef<HTMLDivElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
   const [visible, setVisible] = useState(true);
+  const [headingVisible, setHeadingVisible] = useState(false);
+  const [typedCount, setTypedCount] = useState(0);
 
   useEffect(() => {
     const el = rowRef.current;
@@ -147,8 +155,51 @@ export default function EcosystemCards() {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    const el = headingRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setHeadingVisible(entry.isIntersecting),
+      { threshold: 0.5 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!headingVisible) {
+      const frame = requestAnimationFrame(() => setTypedCount(0));
+      return () => cancelAnimationFrame(frame);
+    }
+    let count = 0;
+    const id = setInterval(() => {
+      count += 1;
+      setTypedCount(count);
+      if (count >= HEADING_LENGTH) clearInterval(id);
+    }, TYPE_SPEED_MS);
+    return () => clearInterval(id);
+  }, [headingVisible]);
+
+  const typingLine1 = typedCount < HEADING_LINE_1.length;
+  const line1Shown = HEADING_LINE_1.slice(
+    0,
+    Math.min(typedCount, HEADING_LINE_1.length),
+  );
+  const line2Shown = HEADING_LINE_2.slice(
+    0,
+    Math.max(0, typedCount - HEADING_LINE_1.length),
+  );
+  const cursor = (
+    <span
+      aria-hidden
+      className="ml-0.5 inline-block w-[2px] animate-pulse bg-current align-middle"
+      style={{ height: "0.85em" }}
+    />
+  );
+
   return (
-    <section className="relative overflow-hidden bg-[var(--surface)] px-6 pb-10 pt-10 sm:px-10 sm:pb-14 sm:pt-14">
+    <section className="relative overflow-hidden bg-[var(--surface)] px-6 pb-16 pt-16 sm:px-10 sm:pb-24 sm:pt-24">
       <Image
         src="/images/hero-network.png"
         alt=""
@@ -159,30 +210,35 @@ export default function EcosystemCards() {
       />
 
       <div className="relative mx-auto max-w-7xl lg:w-fit">
-        <h2 className="font-semibold italic leading-tight text-[var(--ink)]">
-          <span className="block whitespace-nowrap text-[clamp(1.5rem,5vw,3.75rem)]">
-            Conhecimento
+        <h2
+          ref={headingRef}
+          className="font-semibold italic leading-tight text-[var(--ink)]"
+        >
+          <span className="block min-h-[1em] whitespace-nowrap text-[clamp(1.5rem,5vw,3.75rem)]">
+            {line1Shown}
+            {typingLine1 && cursor}
           </span>
-          <span className="block whitespace-nowrap text-[clamp(1.5rem,5vw,3.75rem)]">
-            em <span className="text-[var(--btn-primary)]">movimento.</span>
+          <span className="block min-h-[1em] whitespace-nowrap text-[clamp(1.5rem,5vw,3.75rem)]">
+            <span className="text-[var(--btn-primary)]">{line2Shown}</span>
+            {!typingLine1 && typedCount < HEADING_LENGTH && cursor}
           </span>
         </h2>
 
         <div
           ref={rowRef}
-          className="relative mt-16 flex flex-col items-center gap-8 sm:mt-20 lg:w-fit lg:flex-row lg:items-stretch lg:gap-2"
+          className="relative mt-20 flex flex-col items-center gap-8 sm:mt-28 lg:w-fit lg:flex-row lg:items-stretch lg:gap-2"
         >
           {CARDS.map((card) => (
             <div
               key={card.title}
-              className={`z-10 flex w-full max-w-sm shrink-0 flex-col transition-all duration-700 ease-out ${card.delay} ${card.shift} lg:w-[22rem] lg:min-h-[19rem] xl:w-[26rem] xl:min-h-[21rem] ${
+              className={`z-10 flex w-full max-w-sm shrink-0 flex-col transition-all duration-700 ease-out ${card.delay} ${card.shift} lg:w-[22rem] lg:min-h-[16rem] xl:w-[26rem] xl:min-h-[18rem] ${
                 visible
                   ? "translate-x-0 translate-y-0 opacity-100"
                   : card.hidden
               }`}
             >
               <div
-                className={`relative flex flex-1 flex-col overflow-hidden rounded-3xl border border-white/25 p-7 text-white shadow-xl backdrop-blur-xl transition-transform duration-300 hover:-translate-y-3 hover:shadow-2xl lg:p-8 xl:p-9 ${card.rotate}`}
+                className={`relative flex flex-1 flex-col overflow-hidden rounded-3xl border border-white/25 p-6 text-white shadow-xl backdrop-blur-xl transition-transform duration-300 hover:-translate-y-3 hover:shadow-2xl lg:p-7 xl:p-8 ${card.rotate}`}
                 style={{ background: card.glass }}
               >
                 {/* marca d'água decorativa */}
@@ -210,23 +266,23 @@ export default function EcosystemCards() {
                   )}
                 </div>
 
-                <h3 className="relative mt-5 text-2xl font-bold leading-snug xl:text-[1.75rem]">
+                <h3 className="relative mt-4 text-2xl font-bold leading-snug xl:text-[1.75rem]">
                   {card.title}
                 </h3>
-                <p className="relative mt-3 text-base leading-relaxed text-white/80 xl:text-lg">
+                <p className="relative mt-2 text-base leading-relaxed text-white/80 xl:text-lg">
                   {card.body}
                 </p>
 
                 {/* conteúdo do pilar */}
-                <div className="relative mt-6">
+                <div className="relative mt-4">
                   {card.footer.kind === "list" && (
-                    <div className="space-y-2.5">
+                    <div className="space-y-1.5">
                       {card.footer.items.map((item) => {
                         const ItemIcon = item.icon;
                         return (
                           <div
                             key={item.label}
-                            className="flex items-center gap-3 rounded-xl bg-[rgba(4,48,119,0.5)] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[rgba(4,48,119,0.65)]"
+                            className="flex items-center gap-3 rounded-xl bg-[rgba(4,48,119,0.5)] px-3.5 py-2 text-sm font-semibold text-white transition hover:bg-[rgba(4,48,119,0.65)]"
                           >
                             <ItemIcon />
                             <span className="flex-1">{item.label}</span>
@@ -278,7 +334,7 @@ export default function EcosystemCards() {
 
                 </div>
 
-                <div className="relative mt-auto flex items-center gap-2 pt-6 text-xs text-white/50">
+                <div className="relative mt-auto flex items-center gap-2 pt-4 text-xs text-white/50">
                   <span className="h-px w-4 bg-white/30" />
                   {card.tagline}
                 </div>

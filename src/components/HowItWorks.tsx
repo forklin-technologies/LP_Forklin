@@ -6,7 +6,7 @@ const CARD_GRADIENT = "linear-gradient(135deg, #2451FF 0%, #043077 100%)";
 
 function ChatIcon() {
   return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden>
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden>
       <path
         d="M4 5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H9l-4 4v-4H6a2 2 0 0 1-2-2V5Z"
         stroke="currentColor"
@@ -22,7 +22,7 @@ function ChatIcon() {
 
 function DocIcon() {
   return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden>
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden>
       <path
         d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"
         stroke="currentColor"
@@ -47,7 +47,7 @@ function DocIcon() {
 
 function CodeIcon() {
   return (
-    <span aria-hidden className="text-xl font-bold leading-none">
+    <span aria-hidden className="text-2xl font-bold leading-none">
       {"</>"}
     </span>
   );
@@ -55,7 +55,7 @@ function CodeIcon() {
 
 function RobotIcon() {
   return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden>
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden>
       <path
         d="M12 7V4M9 4h6"
         stroke="currentColor"
@@ -130,7 +130,7 @@ export default function HowItWorks() {
   return (
     <section
       id="como-funciona"
-      className="relative bg-[var(--surface)] px-6 pb-16 pt-10 sm:px-10 sm:pb-20 sm:pt-14"
+      className="relative bg-[var(--surface)] px-6 pb-16 pt-16 sm:px-10 sm:pb-24 sm:pt-24"
     >
       <div
         ref={sectionRef}
@@ -138,7 +138,7 @@ export default function HowItWorks() {
       >
         {/* Cards do processo */}
         <div
-          className={`grid grid-cols-2 gap-5 transition-all duration-700 ease-out sm:gap-6 ${
+          className={`grid grid-cols-2 gap-6 transition-all duration-700 ease-out sm:gap-7 ${
             visible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
           }`}
         >
@@ -149,8 +149,8 @@ export default function HowItWorks() {
                 key={step.number}
                 className={`rounded-2xl transition-transform duration-300 hover:-translate-y-1 ${step.shift} ${
                   step.card
-                    ? "p-6 text-white shadow-xl"
-                    : "p-1 text-[var(--ink)]"
+                    ? "p-7 text-white shadow-xl"
+                    : "p-1.5 text-[var(--ink)]"
                 }`}
                 style={step.card ? { background: CARD_GRADIENT } : undefined}
               >
@@ -158,17 +158,17 @@ export default function HowItWorks() {
                   <span
                     className={
                       step.card
-                        ? "flex h-10 w-10 items-center justify-center rounded-xl bg-white/15"
-                        : "flex h-10 w-10 items-center justify-center text-[var(--btn-primary)]"
+                        ? "flex h-12 w-12 items-center justify-center rounded-xl bg-white/15"
+                        : "flex h-12 w-12 items-center justify-center text-[var(--btn-primary)]"
                     }
                   >
                     <Icon />
                   </span>
-                  <span className="text-xl font-bold">{step.number}</span>
+                  <span className="text-2xl font-bold">{step.number}</span>
                 </div>
-                <h3 className="mt-4 text-lg font-bold">{step.title}</h3>
+                <h3 className="mt-5 text-xl font-bold">{step.title}</h3>
                 <p
-                  className={`mt-1.5 text-sm leading-relaxed ${
+                  className={`mt-2 text-base leading-relaxed ${
                     step.card ? "text-white/85" : "text-[var(--ink-soft)]"
                   }`}
                 >
@@ -189,14 +189,14 @@ export default function HowItWorks() {
             Como funciona
           </span>
 
-          <h2 className="mt-6 text-balance text-4xl font-bold italic leading-tight sm:text-5xl">
+          <h2 className="mt-6 text-balance text-5xl font-bold italic leading-tight sm:text-6xl">
             <span className="text-[var(--ink)]">Um processo claro,</span>
             <br />
             <span className="text-[var(--ink)]">Do início ao </span>
             <span className="text-[var(--btn-primary)]">resultado.</span>
           </h2>
 
-          <p className="mt-6 max-w-md text-lg text-[var(--ink-soft)]">
+          <p className="mt-6 max-w-md text-xl text-[var(--ink-soft)]">
             Acreditamos em um processo transparente e colaborativo, com foco
             em entender o seu contexto, construir a melhor solução e evoluir
             junto com o seu negócio.
