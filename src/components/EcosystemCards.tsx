@@ -228,17 +228,29 @@ export default function EcosystemCards() {
           ref={rowRef}
           className="relative mt-20 flex flex-col items-center gap-8 sm:mt-28 lg:w-fit lg:flex-row lg:items-stretch lg:gap-2"
         >
-          {CARDS.map((card) => (
+          {CARDS.map((card, index) => (
             <div
               key={card.title}
-              className={`z-10 flex w-full max-w-sm shrink-0 flex-col transition-all duration-700 ease-out ${card.delay} ${card.shift} lg:w-[22rem] lg:min-h-[16rem] xl:w-[26rem] xl:min-h-[18rem] ${
+              className={`relative z-10 flex w-full max-w-sm shrink-0 flex-col transition-all duration-700 ease-out ${card.delay} ${card.shift} lg:w-[22rem] lg:min-h-[16rem] xl:w-[26rem] xl:min-h-[18rem] ${
                 visible
                   ? "translate-x-0 translate-y-0 opacity-100"
                   : card.hidden
               }`}
             >
+              {index === 0 && (
+                <div className="pointer-events-none absolute -right-3 -top-20 z-0 w-24 sm:w-28 lg:hidden">
+                  <Image
+                    src="/images/robot-session2-nobg.png"
+                    alt=""
+                    aria-hidden
+                    width={324}
+                    height={418}
+                    className="w-full -rotate-3"
+                  />
+                </div>
+              )}
               <div
-                className={`relative flex flex-1 flex-col overflow-hidden rounded-3xl border border-white/25 p-6 text-white shadow-xl backdrop-blur-xl transition-transform duration-300 hover:-translate-y-3 hover:shadow-2xl lg:p-7 xl:p-8 ${card.rotate}`}
+                className={`relative z-10 flex flex-1 flex-col overflow-hidden rounded-3xl border border-white/25 p-6 text-white shadow-xl backdrop-blur-xl transition-transform duration-300 hover:-translate-y-3 hover:shadow-2xl lg:p-7 xl:p-8 ${card.rotate}`}
                 style={{ background: card.glass }}
               >
                 {/* marca d'água decorativa */}

@@ -21,15 +21,15 @@ export default function Hero() {
           Um ecossistema, várias soluções
         </p>
         <h1 className="font-extrabold leading-[1.1] tracking-tight text-[var(--ink)]">
-          <span className="block whitespace-nowrap text-[clamp(1.75rem,6.5vw,5rem)]">
+          <span className="block whitespace-nowrap text-[clamp(2rem,8.5vw,5.25rem)]">
             Seu ecossistema.
           </span>
-          <span className="block whitespace-nowrap text-[clamp(1.75rem,6.5vw,5rem)]">
+          <span className="block whitespace-nowrap text-[clamp(2rem,8.5vw,5.25rem)]">
             Cresça com a{" "}
             <span className="text-[var(--btn-primary)]">Forklin.</span>
           </span>
         </h1>
-        <p className="mt-6 max-w-xl text-balance text-lg text-[var(--ink-soft)] opacity-70 sm:text-xl">
+        <p className="mt-6 max-w-xl text-balance text-base text-[var(--ink-soft)] opacity-70 sm:text-lg">
           Desenvolvemos sistemas e produtos digitais que transformam ideias em
           resultados reais.
         </p>

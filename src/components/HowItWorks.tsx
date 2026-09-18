@@ -189,7 +189,7 @@ export default function HowItWorks() {
             Como funciona
           </span>
 
-          <h2 className="mt-6 text-balance text-5xl font-bold italic leading-tight sm:text-6xl">
+          <h2 className="mt-6 text-balance text-5xl font-bold leading-tight sm:text-6xl">
             <span className="text-[var(--ink)]">Um processo claro,</span>
             <br />
             <span className="text-[var(--ink)]">Do início ao </span>
