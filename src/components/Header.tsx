@@ -34,7 +34,7 @@ export default function Header() {
         <div className="hidden items-center gap-6 lg:flex">
           <span className="h-6 w-px bg-[var(--line)]" aria-hidden />
           <a
-            href="#acessar"
+            href="https://app.forklin.com.br"
             className="inline-flex items-center gap-2 rounded-full bg-[var(--navy)] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[var(--navy-mid)]"
           >
             Acessar
@@ -83,7 +83,7 @@ export default function Header() {
               </a>
             ))}
             <a
-              href="#acessar"
+              href="https://app.forklin.com.br"
               onClick={() => setOpen(false)}
               className="mt-2 inline-flex w-fit items-center gap-2 rounded-full bg-[var(--navy)] px-5 py-2.5 text-sm font-semibold text-white"
             >
