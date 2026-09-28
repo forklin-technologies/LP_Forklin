@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Logo from "./Logo";
 import { SOCIAL_LINKS } from "@/lib/contact";
 
 type FooterLink = { label: string; href: string; external?: boolean };
@@ -96,16 +96,8 @@ export default function Footer() {
       <div className="relative mx-auto max-w-7xl">
         <div className="grid gap-12 lg:grid-cols-[1.3fr_2fr]">
           <div className="max-w-xs">
-            <a href="#top" className="inline-flex items-center gap-1.5">
-              <Image
-                src="/images/logo-forklin.png"
-                alt=""
-                aria-hidden
-                width={28}
-                height={28}
-                className="h-7 w-7"
-              />
-              <span className="text-lg font-bold">forklin</span>
+            <a href="#top" className="inline-flex" aria-label="Forklin, voltar ao topo">
+              <Logo light />
             </a>
             <p className="mt-4 text-sm leading-relaxed text-white/70">
               Personalização, desenvolvimento e suporte em um único ecossistema

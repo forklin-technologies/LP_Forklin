@@ -255,12 +255,12 @@ export default function EcosystemCards() {
               >
                 {/* marca d'água decorativa */}
                 <Image
-                  src="/images/logo-forklin.png"
+                  src="/images/logo-forklin-mark.png"
                   alt=""
                   aria-hidden
-                  width={96}
-                  height={96}
-                  className="pointer-events-none absolute -right-4 -top-4 h-20 w-20 opacity-[0.12] xl:h-24 xl:w-24"
+                  width={402}
+                  height={446}
+                  className="pointer-events-none absolute -right-4 -top-4 h-20 w-auto opacity-[0.12] xl:h-24"
                 />
 
                 {/* cabeçalho: número + rótulo */}

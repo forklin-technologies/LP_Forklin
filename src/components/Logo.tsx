@@ -2,23 +2,19 @@ import Image from "next/image";
 
 type LogoProps = {
   className?: string;
+  /** Versão com texto branco, para fundos escuros (footer). */
+  light?: boolean;
 };
 
-export default function Logo({ className }: LogoProps) {
+export default function Logo({ className, light = false }: LogoProps) {
   return (
-    <span className={`inline-flex items-center gap-1 ${className ?? ""}`}>
-      <Image
-        src="/images/logo-forklin.png"
-        alt=""
-        aria-hidden
-        width={32}
-        height={32}
-        priority
-        className="h-8 w-8 shrink-0"
-      />
-      <span className="text-xl font-bold tracking-tight text-[var(--ink)]">
-        forklin
-      </span>
-    </span>
+    <Image
+      src={light ? "/images/logo-forklin-full-light.png" : "/images/logo-forklin-full.png"}
+      alt="Forklin"
+      width={1200}
+      height={315}
+      priority={!light}
+      className={`h-8 w-auto ${className ?? ""}`}
+    />
   );
 }
