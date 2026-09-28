@@ -7,7 +7,6 @@ const NAV_LINKS = [
   { label: "Soluções", href: "#segmentos" },
   { label: "Educação", href: "#for-education" },
   { label: "Vendas", href: "#for-sales" },
-  { label: "Contato", href: "#contato" },
 ];
 
 export default function Header() {
@@ -35,10 +34,10 @@ export default function Header() {
         <div className="hidden items-center gap-6 lg:flex">
           <span className="h-6 w-px bg-[var(--line)]" aria-hidden />
           <a
-            href="https://app.forklin.com.br"
+            href="#contato"
             className="inline-flex items-center gap-2 rounded-full bg-[var(--navy)] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[var(--navy-mid)]"
           >
-            Acessar
+            Entrar em contato
             <span aria-hidden>&rarr;</span>
           </a>
         </div>
@@ -84,11 +83,11 @@ export default function Header() {
               </a>
             ))}
             <a
-              href="https://app.forklin.com.br"
+              href="#contato"
               onClick={() => setOpen(false)}
               className="mt-2 inline-flex w-fit items-center gap-2 rounded-full bg-[var(--navy)] px-5 py-2.5 text-sm font-semibold text-white"
             >
-              Acessar
+              Entrar em contato
               <span aria-hidden>&rarr;</span>
             </a>
           </nav>

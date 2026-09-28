@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { APP_URL, SOCIAL_LINKS } from "@/lib/contact";
+import { SOCIAL_LINKS } from "@/lib/contact";
 
 type FooterLink = { label: string; href: string; external?: boolean; badge?: string };
 
@@ -27,7 +27,6 @@ const COLUMNS: { title: string; links: FooterLink[] }[] = [
       { label: "Diário Digital", href: "#for-education" },
       { label: "Biblioteca", href: "#for-education", badge: "Em breve" },
       { label: "Patrimônio", href: "#for-education", badge: "Em breve" },
-      { label: "Acessar plataforma", href: APP_URL, external: true },
     ],
   },
 ];
