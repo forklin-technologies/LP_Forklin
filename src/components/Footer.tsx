@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { SOCIAL_LINKS } from "@/lib/contact";
 
-type FooterLink = { label: string; href: string; external?: boolean; badge?: string };
+type FooterLink = { label: string; href: string; external?: boolean };
 
 const COLUMNS: { title: string; links: FooterLink[] }[] = [
   {
@@ -18,15 +18,15 @@ const COLUMNS: { title: string; links: FooterLink[] }[] = [
     title: "Segmentos",
     links: [
       { label: "For Education", href: "#for-education" },
-      { label: "For Sales", href: "#for-sales", badge: "Em breve" },
+      { label: "For Sales", href: "#for-sales" },
     ],
   },
   {
     title: "Produtos",
     links: [
       { label: "Diário Digital", href: "#for-education" },
-      { label: "Biblioteca", href: "#for-education", badge: "Em breve" },
-      { label: "Patrimônio", href: "#for-education", badge: "Em breve" },
+      { label: "Biblioteca", href: "#for-education" },
+      { label: "Patrimônio", href: "#for-education" },
     ],
   },
 ];
@@ -156,11 +156,6 @@ export default function Footer() {
                         {link.external && (
                           <span className="opacity-50 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100">
                             <ArrowOutIcon />
-                          </span>
-                        )}
-                        {link.badge && (
-                          <span className="rounded-full bg-white/10 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-white/60">
-                            {link.badge}
                           </span>
                         )}
                       </a>
