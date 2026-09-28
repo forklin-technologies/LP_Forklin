@@ -36,13 +36,13 @@ export default function Hero() {
 
         <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row">
           <a
-            href="#orcamento"
+            href="#contato"
             className="inline-flex items-center justify-center rounded-full bg-[var(--btn-primary)] px-7 py-3.5 text-base font-semibold text-white transition hover:bg-[var(--btn-primary-hover)]"
           >
             Realizar Orçamento
           </a>
           <a
-            href="#solucoes"
+            href="#segmentos"
             className="inline-flex items-center justify-center rounded-full bg-black px-7 py-3.5 text-base font-semibold text-white transition hover:bg-neutral-800"
           >
             Conhecer os Produtos

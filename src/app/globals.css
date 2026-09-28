@@ -11,6 +11,8 @@
   --brand-dark:  #1230B0;
   --brand-light: #E8EEFF;
   --accent-cyan: #06B6D4;
+  --sky:         #38BDF8;
+  --sky-soft:    #7DD3FC;
 
   /* Navy — hero, footer */
   --navy:        #0B1220;
@@ -91,4 +93,22 @@ body {
   filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
   animation: border-spin 4s linear infinite;
   pointer-events: none;
+}
+
+@keyframes tab-progress {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+@keyframes panel-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

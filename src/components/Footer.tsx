@@ -1,29 +1,41 @@
 "use client";
 
 import Image from "next/image";
+import { APP_URL, SOCIAL_LINKS } from "@/lib/contact";
 
-const PRODUCT_COLUMNS = [
+type FooterLink = { label: string; href: string; external?: boolean; badge?: string };
+
+const COLUMNS: { title: string; links: FooterLink[] }[] = [
   {
-    title: "PRODUTO",
-    links: [{ label: "Privacidade", href: "#" }],
+    title: "Navegação",
+    links: [
+      { label: "Início", href: "#top" },
+      { label: "Segmentos", href: "#segmentos" },
+      { label: "Contato", href: "#contato" },
+    ],
   },
-  { title: "PRODUTO", links: [] as { label: string; href: string }[] },
-  { title: "PRODUTO", links: [] as { label: string; href: string }[] },
-  { title: "PRODUTO", links: [] as { label: string; href: string }[] },
+  {
+    title: "Segmentos",
+    links: [
+      { label: "For Education", href: "#for-education" },
+      { label: "For Sales", href: "#for-sales", badge: "Em breve" },
+    ],
+  },
+  {
+    title: "Produtos",
+    links: [
+      { label: "Diário Digital", href: "#for-education" },
+      { label: "Biblioteca", href: "#for-education", badge: "Em breve" },
+      { label: "Patrimônio", href: "#for-education", badge: "Em breve" },
+      { label: "Acessar plataforma", href: APP_URL, external: true },
+    ],
+  },
 ];
 
 function InstagramIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <rect
-        x="3"
-        y="3"
-        width="18"
-        height="18"
-        rx="5"
-        stroke="currentColor"
-        strokeWidth="1.8"
-      />
+      <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="1.8" />
       <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.8" />
       <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" />
     </svg>
@@ -33,15 +45,7 @@ function InstagramIcon() {
 function LinkedInIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <rect
-        x="3"
-        y="3"
-        width="18"
-        height="18"
-        rx="3"
-        stroke="currentColor"
-        strokeWidth="1.8"
-      />
+      <rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" strokeWidth="1.8" />
       <path
         d="M7.5 10v6.5M7.5 7.5v.01M11.5 16.5V13c0-1.4.9-2.2 2-2.2s1.8.8 1.8 2.2v3.5"
         stroke="currentColor"
@@ -52,6 +56,8 @@ function LinkedInIcon() {
     </svg>
   );
 }
+
+const SOCIAL_ICONS = { Instagram: InstagramIcon, LinkedIn: LinkedInIcon };
 
 function ArrowUpIcon() {
   return (
@@ -67,17 +73,31 @@ function ArrowUpIcon() {
   );
 }
 
+function ArrowOutIcon() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M7 17 17 7M9 7h8v8"
+        stroke="currentColor"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export default function Footer() {
   function scrollToTop() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   return (
-    <footer className="relative overflow-hidden bg-gradient-to-r from-[var(--navy)] to-[var(--brand)] px-6 pb-8 pt-16 text-white sm:px-10 sm:pt-20">
-      <div className="mx-auto max-w-7xl">
-        <div className="flex flex-col gap-12 sm:flex-row sm:justify-between">
+    <footer className="relative overflow-hidden bg-gradient-to-r from-[var(--navy)] to-[var(--brand)] px-6 pt-16 text-white sm:px-10 sm:pt-20">
+      <div className="relative mx-auto max-w-7xl">
+        <div className="grid gap-12 lg:grid-cols-[1.3fr_2fr]">
           <div className="max-w-xs">
-            <div className="flex items-center gap-1.5">
+            <a href="#top" className="inline-flex items-center gap-1.5">
               <Image
                 src="/images/logo-forklin.png"
                 alt=""
@@ -87,80 +107,91 @@ export default function Footer() {
                 className="h-7 w-7"
               />
               <span className="text-lg font-bold">forklin</span>
-            </div>
+            </a>
             <p className="mt-4 text-sm leading-relaxed text-white/70">
-              Personalização, desenvolvimento e suporte — em um único
-              ecossistema de soluções.
+              Personalização, desenvolvimento e suporte em um único ecossistema
+              de soluções para educação e vendas.
             </p>
-            <div className="mt-5 flex items-center gap-3">
-              <a
-                href="#"
-                aria-label="Instagram"
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20"
-              >
-                <InstagramIcon />
-              </a>
-              <a
-                href="#"
-                aria-label="LinkedIn"
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20"
-              >
-                <LinkedInIcon />
-              </a>
-            </div>
+
+            {SOCIAL_LINKS.length > 0 && (
+              <div className="mt-5 flex items-center gap-3">
+                {SOCIAL_LINKS.map((social) => {
+                  const Icon = SOCIAL_ICONS[social.label];
+                  return (
+                    <a
+                      key={social.label}
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={social.label}
+                      className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition hover:-translate-y-0.5 hover:bg-white/20"
+                    >
+                      <Icon />
+                    </a>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
-          <div className="grid grid-cols-2 gap-x-10 gap-y-8 sm:grid-cols-4">
-            {PRODUCT_COLUMNS.map((col, i) => (
-              <div key={i}>
-                <h3 className="text-xs font-bold uppercase tracking-wide text-white/90">
+          <div className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-3">
+            {COLUMNS.map((col) => (
+              <div key={col.title}>
+                <h3 className="text-xs font-bold uppercase tracking-wider text-white/90">
                   {col.title}
                 </h3>
-                {col.links.length > 0 && (
-                  <ul className="mt-3 space-y-2">
-                    {col.links.map((link) => (
-                      <li key={link.label}>
-                        <a
-                          href={link.href}
-                          className="text-sm text-white/70 transition hover:text-white"
-                        >
+                <ul className="mt-4 space-y-2.5">
+                  {col.links.map((link) => (
+                    <li key={link.label}>
+                      <a
+                        href={link.href}
+                        {...(link.external
+                          ? { target: "_blank", rel: "noopener noreferrer" }
+                          : {})}
+                        className="group inline-flex items-center gap-1.5 text-sm text-white/70 transition hover:text-white"
+                      >
+                        <span className="relative">
                           {link.label}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                )}
+                          <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-white/70 transition-transform duration-300 group-hover:scale-x-100" />
+                        </span>
+                        {link.external && (
+                          <span className="opacity-50 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100">
+                            <ArrowOutIcon />
+                          </span>
+                        )}
+                        {link.badge && (
+                          <span className="rounded-full bg-white/10 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-white/60">
+                            {link.badge}
+                          </span>
+                        )}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={scrollToTop}
-          aria-label="Voltar ao topo"
-          className="absolute bottom-8 right-6 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20 sm:right-10"
-        >
-          <ArrowUpIcon />
-        </button>
 
-        <div className="mt-12 border-t border-white/15 pt-6">
+        <div className="relative mt-16 border-t border-white/15 py-6">
           <div className="flex flex-col items-center justify-between gap-4 text-xs text-white/60 sm:flex-row">
             <p>
-              © {new Date().getFullYear()} Forklin Technologies – Todos os
-              direitos reservados.
+              © {new Date().getFullYear()} Forklin Technologies. Todos os direitos
+              reservados.
             </p>
-            <div className="flex items-center gap-6">
-              <a href="#" className="transition hover:text-white">
-                Política de Privacidade
-              </a>
-              <a href="#" className="transition hover:text-white">
-                Termos de Uso
-              </a>
-              <a href="#" className="transition hover:text-white">
-                Cookie Policy
-              </a>
-            </div>
+            {/* TODO: adicionar Política de Privacidade e Termos de Uso quando as páginas existirem */}
+            <button
+              type="button"
+              onClick={scrollToTop}
+              aria-label="Voltar ao topo"
+              className="group inline-flex items-center gap-2 rounded-full bg-white/10 py-1.5 pl-4 pr-1.5 text-white/80 transition hover:bg-white/20 hover:text-white"
+            >
+              Voltar ao topo
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/15 transition-transform duration-300 group-hover:-translate-y-0.5">
+                <ArrowUpIcon />
+              </span>
+            </button>
           </div>
         </div>
       </div>

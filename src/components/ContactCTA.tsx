@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-
-const WHATSAPP_URL = process.env.NEXT_PUBLIC_WHATSAPP_URL ?? "#";
+import { WHATSAPP_DISPLAY, WHATSAPP_URL } from "@/lib/contact";
+import { WhatsAppIcon } from "./WhatsAppButton";
 
 export default function ContactCTA() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -20,7 +20,10 @@ export default function ContactCTA() {
   }, []);
 
   return (
-    <section className="relative bg-[var(--surface)] px-6 pb-24 pt-16 text-center sm:px-10 sm:pb-32 sm:pt-24">
+    <section
+      id="contato"
+      className="relative scroll-mt-8 bg-[var(--surface)] px-6 pb-24 pt-16 text-center sm:px-10 sm:pb-32 sm:pt-24"
+    >
       <div
         ref={sectionRef}
         className={`mx-auto max-w-4xl transition-all duration-700 ease-out ${
@@ -48,10 +51,17 @@ export default function ContactCTA() {
           href={WHATSAPP_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-10 inline-flex items-center justify-center rounded-full bg-[var(--navy)] px-12 py-5 text-lg font-semibold text-white transition hover:bg-[var(--navy-mid)]"
+          className="group mt-10 inline-flex items-center gap-4 rounded-full border border-[var(--line)] bg-white py-2.5 pl-2.5 pr-9 text-lg font-semibold text-[var(--navy)] shadow-[0_16px_40px_-20px_rgba(4,48,119,0.35)] transition hover:-translate-y-0.5 hover:shadow-[0_24px_48px_-20px_rgba(4,48,119,0.45)]"
         >
+          <span className="flex h-12 w-12 items-center justify-center rounded-full bg-[#25D366] text-white transition-transform duration-300 group-hover:scale-105">
+            <WhatsAppIcon size={24} />
+          </span>
           Falar no WhatsApp
         </a>
+
+        <p className="mt-4 text-sm font-medium text-[var(--ink-soft)]">
+          {WHATSAPP_DISPLAY}
+        </p>
       </div>
     </section>
   );

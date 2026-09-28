@@ -4,9 +4,10 @@ import { useState } from "react";
 import Logo from "./Logo";
 
 const NAV_LINKS = [
-  { label: "Soluções", href: "#solucoes" },
-  { label: "Clientes", href: "#clientes" },
-  { label: "Como Funciona", href: "#como-funciona" },
+  { label: "Soluções", href: "#segmentos" },
+  { label: "Educação", href: "#for-education" },
+  { label: "Vendas", href: "#for-sales" },
+  { label: "Contato", href: "#contato" },
 ];
 
 export default function Header() {
