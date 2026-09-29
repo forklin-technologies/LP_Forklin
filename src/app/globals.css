@@ -157,7 +157,7 @@ body {
   --ap-line: #d2d2d7;
   --ap-accent: #2451ff;
   --ap-accent-hover: #1a3fe0;
-  --ap-font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", var(--font-sans), system-ui, sans-serif;
+  --ap-font: var(--font-sans), "Poppins", system-ui, sans-serif;
 }
 
 :root[data-theme="dark"] {
@@ -174,17 +174,17 @@ body {
   background-color: var(--ap-bg);
   color: var(--ap-text);
   font-family: var(--ap-font);
-  letter-spacing: -0.011em;
+  letter-spacing: -0.005em;
   transition: background-color 0.5s ease, color 0.5s ease;
 }
 .ap-section-alt { background-color: var(--ap-bg-alt); transition: background-color 0.5s ease; }
 
 /* Tipografia: o tamanho e o espaço fazem a hierarquia */
 .ap-display {
-  font-size: clamp(44px, 8vw, 88px);
+  font-size: clamp(40px, 7vw, 80px);
   line-height: 1.02;
   font-weight: 700;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.04em;
 }
 .ap-headline {
   font-size: clamp(36px, 5.6vw, 64px);
@@ -211,12 +211,70 @@ body {
 .ap-link:hover { text-decoration: underline; }
 
 /* Cartões do bento: sólidos e quietos */
+/* Cards: no espírito da LP anterior (borda + ícone + elevação), um pouco mais contidos */
 .ap-card {
-  border-radius: 20px; background: #fff; padding: 28px;
-  min-height: 220px;
-  transition: transform 0.4s cubic-bezier(.2,.8,.2,1), box-shadow 0.4s ease;
+  border-radius: 24px; background: #fff; padding: 28px;
+  min-height: 240px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+  transition: translate 0.45s cubic-bezier(.2,.8,.2,1), box-shadow 0.45s ease, border-color 0.45s ease;
 }
-.ap-card:hover { transform: translateY(-2px) scale(1.005); box-shadow: 0 12px 30px -18px rgba(0,0,0,.18); }
+.ap-card:hover {
+  translate: 0 -6px;
+  border-color: color-mix(in srgb, var(--ap-accent) 35%, transparent);
+  box-shadow: 0 28px 50px -28px rgba(36, 81, 255, 0.35);
+}
+.ap-icon-chip {
+  display: flex; height: 44px; width: 44px; align-items: center; justify-content: center;
+  border-radius: 14px; background: #e8eeff; color: var(--ap-accent);
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+}
+.group:hover .ap-icon-chip { background: var(--ap-accent); color: #fff; transform: rotate(-6deg) scale(1.06); }
+/* brilho que segue o mouse (só com mouse de verdade) */
+.ap-spot { position: relative; }
+@media (hover: hover) and (pointer: fine) {
+  .ap-spot::after {
+    content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    background: radial-gradient(420px circle at var(--sx, 50%) var(--sy, 50%), rgba(36, 81, 255, 0.10), transparent 60%);
+    opacity: 0; transition: opacity 0.35s ease;
+  }
+  .ap-spot:hover::after { opacity: 1; }
+}
+
+/* Legenda do notebook no hero (vidro: é "chrome" por cima do produto) */
+.ap-caption-card {
+  border-radius: 20px; padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.82);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 20px 40px -24px rgba(0, 0, 0, 0.3);
+}
+@media (prefers-reduced-transparency: reduce) { .ap-caption-card { background: #fff; -webkit-backdrop-filter: none; backdrop-filter: none; } }
+
+/* Texto: palavras entrando ao abrir a página + brilho único no destaque */
+@keyframes ap-word-in {
+  from { opacity: 0; transform: translateY(0.45em); filter: blur(8px); }
+  to   { opacity: 1; transform: none; filter: blur(0); }
+}
+@keyframes ap-fade { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+.ap-fade-in { animation: ap-fade 0.9s cubic-bezier(.2,.8,.2,1) 0.5s both; }
+.ap-shine {
+  background: linear-gradient(100deg, var(--ap-accent) 0%, var(--ap-accent) 40%, #9fd0ff 50%, var(--ap-accent) 60%, var(--ap-accent) 100%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: ap-word-in 0.9s cubic-bezier(.2,.8,.2,1) both, ap-shine 3.2s ease-in-out 1.4s 1 both;
+}
+@keyframes ap-shine { from { background-position: 100% 0; } to { background-position: 0% 0; } }
+
+/* Logo 3D: flutua sozinha; na seção escura ganha brilho azul */
+@keyframes ap-logo-float {
+  0%   { transform: translateY(0) rotate(0deg); }
+  50%  { transform: translateY(-14px) rotate(3deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+.ap-logo-float { animation: ap-logo-float 6s ease-in-out infinite; }
+.ap-logo-glow { filter: drop-shadow(0 0 40px rgba(77, 123, 255, 0.55)) drop-shadow(0 0 90px rgba(6, 182, 212, 0.25)); }
 
 /* Navegação: vidro só aqui (chrome) */
 .ap-nav { transition: background-color 0.3s ease, backdrop-filter 0.3s ease, border-color 0.3s ease; border-bottom: 1px solid transparent; }
@@ -246,6 +304,7 @@ body {
 .ap-float { animation: ap-float 5s ease-in-out infinite alternate; will-change: transform; }
 
 @media (prefers-reduced-motion: reduce) {
-  .ap-float { animation: none; }
+  .ap-float, .ap-logo-float { animation: none; }
+  .ap-shine { animation: none; }
   .ap-page, .ap-section-alt { transition: none; }
 }

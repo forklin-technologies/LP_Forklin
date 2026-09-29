@@ -167,47 +167,55 @@ function Historico() {
 
 const MENU = ["Início", "Diário de Classe", "Estudantes", "Generalidades", "Relatórios", "Avaliação"];
 
-export default function DiarioDevice({ tela = "chamada" }: { tela?: TelaDiario }) {
+// Tela do Diário Digital (menu lateral + a tela escolhida, com transição entre elas).
+export function DiarioScreen({ tela = "chamada" }: { tela?: TelaDiario }) {
   const ativo = tela === "chamada" ? 1 : tela === "calendario" ? 0 : 2;
   return (
-    // A letra da tela acompanha a LARGURA DO NOTEBOOK (container query), não a da janela: o
-    // mesmo aparelho aparece grande no hero e menor no bento/cena, sempre proporcional.
-    <div className="mx-auto w-full text-left [container-type:inline-size]" aria-label="Tela do Diário Digital" role="img">
-      {/* tela + moldura */}
-      <div className="rounded-[1.4rem] bg-[#1d1d1f] p-[0.9%] shadow-[0_40px_80px_-40px_rgba(0,0,0,0.45)]">
-        <div className="relative aspect-[16/10] overflow-hidden rounded-[0.9rem] bg-[#FAFAFD] text-[2.3cqw]">
-          <div className="flex h-full">
-            <aside className="flex w-[22%] flex-col gap-[0.35em] bg-[#24183B] p-[0.9em] text-white">
-              <p className="mb-[0.6em] text-[0.75em] font-bold">Diário Digital</p>
-              {MENU.map((m, i) => (
-                <span
-                  key={m}
-                  className={`rounded-[0.45em] px-[0.6em] py-[0.4em] text-[0.55em] ${
-                    i === ativo ? "bg-white/15 font-semibold" : "text-white/60"
-                  }`}
-                >
-                  {m}
-                </span>
-              ))}
-              <span className="mt-auto text-[0.5em] text-white/50">EMEB Modelo · Secretaria</span>
-            </aside>
-            <main className="relative flex-1 p-[1.1em]">
-              {(["chamada", "calendario", "historico"] as const).map((t) => (
-                <div
-                  key={t}
-                  aria-hidden={t !== tela}
-                  className="absolute inset-[1.1em] transition-[opacity,transform] duration-500 ease-out"
-                  style={{ opacity: t === tela ? 1 : 0, transform: t === tela ? "none" : "translateY(0.6em)" }}
-                >
-                  {t === "chamada" ? <Chamada /> : t === "calendario" ? <Calendario /> : <Historico />}
-                </div>
-              ))}
-            </main>
+    <div className="flex h-full">
+      <aside className="flex w-[22%] flex-col gap-[0.35em] bg-[#24183B] p-[0.9em] text-white">
+        <p className="mb-[0.6em] text-[0.75em] font-bold">Diário Digital</p>
+        {MENU.map((m, i) => (
+          <span key={m} className={`rounded-[0.45em] px-[0.6em] py-[0.4em] text-[0.55em] ${i === ativo ? "bg-white/15 font-semibold" : "text-white/60"}`}>
+            {m}
+          </span>
+        ))}
+        <span className="mt-auto text-[0.5em] text-white/50">EMEB Modelo · Secretaria</span>
+      </aside>
+      {/* <div>, não <main>: a página já tem o seu <main> (só pode haver um) */}
+      <div className="relative flex-1 p-[1.1em]">
+        {(["chamada", "calendario", "historico"] as const).map((t) => (
+          <div
+            key={t}
+            aria-hidden={t !== tela}
+            className="absolute inset-[1.1em] transition-[opacity,transform] duration-500 ease-out"
+            style={{ opacity: t === tela ? 1 : 0, transform: t === tela ? "none" : "translateY(0.6em)" }}
+          >
+            {t === "chamada" ? <Chamada /> : t === "calendario" ? <Calendario /> : <Historico />}
           </div>
-        </div>
+        ))}
       </div>
-      {/* base do notebook */}
+    </div>
+  );
+}
+
+// Moldura do notebook — serve pra QUALQUER sistema (a tela vem como children).
+// A letra da tela acompanha a LARGURA DO NOTEBOOK (container query), não a da janela: o
+// mesmo aparelho aparece grande no hero e menor no bento, sempre proporcional.
+export function DeviceFrame({ children, label = "Tela do sistema" }: { children: React.ReactNode; label?: string }) {
+  return (
+    <div className="mx-auto w-full text-left [container-type:inline-size]" aria-label={label} role="img">
+      <div className="rounded-[1.4rem] bg-[#1d1d1f] p-[0.9%] shadow-[0_40px_80px_-40px_rgba(0,0,0,0.45)]">
+        <div className="relative aspect-[16/10] overflow-hidden rounded-[0.9rem] bg-[#FAFAFD] text-[2.3cqw]">{children}</div>
+      </div>
       <div className="mx-auto h-[0.9rem] w-[108%] -translate-x-[3.7%] rounded-b-[1.2rem] bg-gradient-to-b from-[#d6d6db] to-[#a9a9b1]" />
     </div>
+  );
+}
+
+export default function DiarioDevice({ tela = "chamada" }: { tela?: TelaDiario }) {
+  return (
+    <DeviceFrame label="Tela do Diário Digital">
+      <DiarioScreen tela={tela} />
+    </DeviceFrame>
   );
 }

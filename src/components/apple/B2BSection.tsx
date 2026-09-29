@@ -1,15 +1,11 @@
 "use client";
 
-// B2B: volta para o claro. Três pilares em tipografia (sem caixas) e o processo em 4 etapas
-// numa linha que se "desenha" com a rolagem (--through suavizado).
+// B2B: volta para o claro. O processo em 4 etapas numa linha que se "desenha" com a rolagem
+// (--through suavizado). Os pilares (Personalização/Desenvolvimento/Suporte) ficam na seção do
+// robô (EcosystemCards), logo abaixo do hero — não se repetem aqui.
 import { useRef } from "react";
 import { useScrollVars } from "./scroll";
-
-const PILARES = [
-  { titulo: "Personalização", texto: "Soluções moldadas para a realidade do seu negócio — sem fórmula genérica." },
-  { titulo: "Desenvolvimento", texto: "Do primeiro protótipo ao produto em produção, com foco em resultado." },
-  { titulo: "Suporte", texto: "Acompanhamento de perto, do primeiro dia em diante, para a operação nunca parar." },
-];
+import { RevealText } from "./effects";
 
 const ETAPAS = [
   { titulo: "Diagnóstico", texto: "Entendemos o seu processo, as pessoas envolvidas e onde está o gargalo." },
@@ -26,18 +22,10 @@ export default function B2BSection() {
     <section id="b2b" data-theme-section="light" className="px-5 py-28 sm:py-40">
       <div className="mx-auto max-w-[1024px]">
         <p className="ap-eyebrow">B2B personalizado</p>
-        <h2 className="ap-headline mt-2 max-w-[16ch]">Sob medida para a sua organização.</h2>
+        <RevealText texto="Sob medida para a sua organização." destaque={["organização."]} className="ap-headline mt-2 max-w-[16ch]" />
+        <p className="ap-lead mt-5 max-w-[42ch]">Um processo claro, do diagnóstico ao sistema no ar — e depois dele.</p>
 
-        <div className="mt-14 grid gap-10 sm:grid-cols-3">
-          {PILARES.map((p) => (
-            <div key={p.titulo}>
-              <h3 className="text-[21px] font-semibold tracking-[-0.015em] text-[#1d1d1f]">{p.titulo}</h3>
-              <p className="mt-2 text-[17px] leading-relaxed text-[#6e6e73]">{p.texto}</p>
-            </div>
-          ))}
-        </div>
-
-        <ol ref={ref} className="relative mt-24 grid gap-10 sm:grid-cols-4 sm:gap-6">
+        <ol ref={ref} className="relative mt-16 grid gap-10 sm:grid-cols-4 sm:gap-6">
           {/* linha do processo, desenhada pela rolagem */}
           <span aria-hidden className="absolute left-0 right-0 top-[15px] hidden h-[2px] bg-[#e5e5ea] sm:block" />
           <span

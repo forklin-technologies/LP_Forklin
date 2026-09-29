@@ -1,12 +1,14 @@
 // Chamada final + rodapé "gordo" no padrão apple.com: claro (#f5f5f7), colunas de texto,
 // sem decoração. Os links/contatos vêm de src/lib/contact.ts (item sem valor não aparece).
 import Image from "next/image";
+import { Logo3D, RevealText } from "./effects";
 import { CONTACT_EMAIL, INSTAGRAM_URL, PRIVACY_URL, TERMS_URL, WHATSAPP_DISPLAY, WHATSAPP_URL, YOUTUBE_URL } from "@/lib/contact";
 
 export function FinalCTA() {
   return (
     <section id="contato" data-theme-section="light" className="ap-section-alt px-5 py-28 text-center sm:py-40">
-      <h2 className="ap-headline mx-auto max-w-[18ch]">Encontre a solução ideal para a sua organização.</h2>
+      <Logo3D tamanho="clamp(96px, 12vw, 150px)" giro={40} sobe={60} brilho className="mx-auto mb-8" />
+      <RevealText texto="Encontre a solução ideal para a sua organização." destaque={["organização."]} className="ap-headline mx-auto max-w-[18ch]" />
       <p className="ap-lead mx-auto mt-5 max-w-[40ch]">Conte o que você precisa e a nossa equipe indica o caminho. Atendimento personalizado, sem compromisso.</p>
       <div className="mt-9 flex flex-wrap items-center justify-center gap-x-7 gap-y-4">
         <a href="#fale-conosco" className="ap-btn">
@@ -28,15 +30,15 @@ export function FooterApple() {
       titulo: "Navegação",
       links: [
         { label: "Início", href: "#top" },
-        { label: "Soluções", href: "#solucoes" },
+        { label: "Soluções", href: "#segmentos" },
         { label: "Fale conosco", href: "#fale-conosco" },
       ],
     },
     {
       titulo: "Segmentos",
       links: [
-        { label: "For Education", href: "#educacao" },
-        { label: "For Sales", href: "#vendas" },
+        { label: "For Education", href: "#for-education" },
+        { label: "For Sales", href: "#for-sales" },
         { label: "B2B personalizado", href: "#b2b" },
       ],
     },

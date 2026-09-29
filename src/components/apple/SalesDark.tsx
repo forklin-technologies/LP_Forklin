@@ -5,6 +5,7 @@
 // as frentes "acendem" uma a uma conforme a rolagem (--enter suavizado, sem fade genérico).
 import { useRef } from "react";
 import { useScrollVars } from "./scroll";
+import { Logo3D, RevealText } from "./effects";
 
 const FRENTES = ["CRM", "Gestão comercial", "Automações", "Operação de vendas", "IA comercial"];
 
@@ -13,10 +14,12 @@ export default function SalesDark() {
   useScrollVars(ref);
 
   return (
-    <section id="vendas" data-theme-section="dark" className="px-5 py-32 sm:py-44">
-      <div className="mx-auto max-w-[1024px]">
+    <section id="for-sales" data-theme-section="dark" className="relative overflow-hidden px-5 py-32 sm:py-44">
+      {/* a logo 3D gigante, brilhando atrás da lista — gira e sobe com a rolagem */}
+      <Logo3D tamanho="clamp(280px, 48vw, 680px)" giro={90} sobe={260} brilho className="absolute -right-[12%] top-[18%] opacity-90" />
+      <div className="relative mx-auto max-w-[1024px]">
         <p className="ap-eyebrow">For Sales</p>
-        <h2 className="ap-headline mt-2 max-w-[16ch]">Operação comercial. Simples e organizada.</h2>
+        <RevealText texto="Operação comercial. Simples e organizada." destaque={["Simples", "organizada."]} className="ap-headline mt-2 max-w-[16ch]" />
         <p className="ap-lead mt-5 max-w-[42ch]">
           Estamos construindo as soluções que deixam a rotina comercial mais eficiente, do primeiro contato ao fechamento.
         </p>
