@@ -141,3 +141,111 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ============================================================
+   ESTILO APPLE (branch design/estilo-apple) — skill apple-design
+   Claro por padrão (#fbfbfd / #f5f5f7), texto #1d1d1f, secundário #6e6e73,
+   UMA cor de destaque (o azul da marca Forklin). Um único momento escuro (For Sales),
+   com a página inteira morfando claro↔escuro pela rolagem (html[data-theme]).
+   ============================================================ */
+
+:root {
+  --ap-bg: #fbfbfd;
+  --ap-bg-alt: #f5f5f7;
+  --ap-text: #1d1d1f;
+  --ap-muted: #6e6e73;
+  --ap-line: #d2d2d7;
+  --ap-accent: #2451ff;
+  --ap-accent-hover: #1a3fe0;
+  --ap-font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", var(--font-sans), system-ui, sans-serif;
+}
+
+:root[data-theme="dark"] {
+  --ap-bg: #000000;
+  --ap-bg-alt: #000000;
+  --ap-text: #f5f5f7;
+  --ap-muted: #a1a1a6;
+  --ap-line: #333336;
+  --ap-accent: #4d7bff; /* mesmo azul, mais claro pra contraste no escuro */
+}
+
+.ap-page {
+  min-height: 100vh;
+  background-color: var(--ap-bg);
+  color: var(--ap-text);
+  font-family: var(--ap-font);
+  letter-spacing: -0.011em;
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+.ap-section-alt { background-color: var(--ap-bg-alt); transition: background-color 0.5s ease; }
+
+/* Tipografia: o tamanho e o espaço fazem a hierarquia */
+.ap-display {
+  font-size: clamp(44px, 8vw, 88px);
+  line-height: 1.02;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+}
+.ap-headline {
+  font-size: clamp(36px, 5.6vw, 64px);
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+.ap-lead { font-size: clamp(19px, 2vw, 24px); line-height: 1.35; color: var(--ap-muted); font-weight: 400; }
+.ap-eyebrow { font-size: 17px; font-weight: 600; color: var(--ap-muted); }
+.ap-caption { font-size: 12px; color: var(--ap-muted); }
+.ap-accent { color: var(--ap-accent); }
+
+/* Ações: um botão cheio + links com "›" (nunca caixa em tudo) */
+.ap-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 44px; padding: 0 22px; border-radius: 980px;
+  background: var(--ap-accent); color: #fff; font-size: 17px; font-weight: 500;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+.ap-btn:hover { background: var(--ap-accent-hover); }
+.ap-btn:active { transform: scale(0.98); }
+.ap-btn--sm { min-height: 28px; padding: 0 12px; font-size: 12px; }
+.ap-link { color: var(--ap-accent); font-size: 17px; }
+.ap-link:hover { text-decoration: underline; }
+
+/* Cartões do bento: sólidos e quietos */
+.ap-card {
+  border-radius: 20px; background: #fff; padding: 28px;
+  min-height: 220px;
+  transition: transform 0.4s cubic-bezier(.2,.8,.2,1), box-shadow 0.4s ease;
+}
+.ap-card:hover { transform: translateY(-2px) scale(1.005); box-shadow: 0 12px 30px -18px rgba(0,0,0,.18); }
+
+/* Navegação: vidro só aqui (chrome) */
+.ap-nav { transition: background-color 0.3s ease, backdrop-filter 0.3s ease, border-color 0.3s ease; border-bottom: 1px solid transparent; }
+.ap-nav--glass {
+  background-color: rgba(251, 251, 253, 0.72);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  border-bottom-color: rgba(0, 0, 0, 0.08);
+}
+:root[data-theme="dark"] .ap-nav--glass { background-color: rgba(22, 22, 23, 0.72); border-bottom-color: rgba(255,255,255,.08); }
+.ap-nav-link { color: var(--ap-text); opacity: 0.8; transition: opacity 0.2s ease; }
+.ap-nav-link:hover { opacity: 1; }
+:root[data-theme="dark"] .ap-logo { filter: brightness(0) invert(1); }
+@media (prefers-reduced-transparency: reduce) {
+  .ap-nav--glass { background-color: var(--ap-bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+
+/* Cena fixa: passo em foco em destaque, os outros recuam */
+.ap-step-bar { position: relative; width: 2px; align-self: stretch; min-height: 64px; border-radius: 2px; background: var(--ap-line); overflow: hidden; }
+.ap-step-fill { position: absolute; inset: 0; background: var(--ap-accent); transform-origin: top; }
+@media (min-width: 768px) {
+  .ap-step[data-ativo="false"] { opacity: 0.35; }
+}
+
+/* "Respiração" do produto parado (ambient float) */
+@keyframes ap-float { from { transform: translateY(0); } to { transform: translateY(-8px); } }
+.ap-float { animation: ap-float 5s ease-in-out infinite alternate; will-change: transform; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ap-float { animation: none; }
+  .ap-page, .ap-section-alt { transition: none; }
+}

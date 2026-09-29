@@ -1,32 +1,31 @@
-import AuroraBackground from "@/components/AuroraBackground";
-import Header from "@/components/Header";
-import Hero from "@/components/Hero";
-import EcosystemCards from "@/components/EcosystemCards";
-import Segments from "@/components/Segments";
-import ForEducation from "@/components/ForEducation";
-import ForSales from "@/components/ForSales";
-import B2B from "@/components/B2B";
-import ContactCTA from "@/components/ContactCTA";
+// LP no estilo apple.com (branch design/estilo-apple) — feita com a skill apple-design
+// (.claude/skills/apple-design*): claro por padrão, uma cor de destaque, o produto real como
+// protagonista, uma ideia por seção e movimento ligado à rolagem. O formulário de contato
+// (ContactModal, aberto por #fale-conosco…) é o mesmo da LP atual, sem mudança no envio.
 import ContactModal from "@/components/ContactModal";
-import Footer from "@/components/Footer";
-import BackToTop from "@/components/BackToTop";
-import ScrollProgress from "@/components/ScrollProgress";
+import Nav from "@/components/apple/Nav";
+import Hero from "@/components/apple/Hero";
+import Highlights from "@/components/apple/Highlights";
+import EducationScene from "@/components/apple/EducationScene";
+import SalesDark from "@/components/apple/SalesDark";
+import B2BSection from "@/components/apple/B2BSection";
+import { FinalCTA, FooterApple } from "@/components/apple/FinalCTA";
+import ThemeMorph from "@/components/apple/ThemeMorph";
 
 export default function Home() {
   return (
-    <div className="relative isolate flex min-h-screen flex-col">
-      <AuroraBackground />
-      <ScrollProgress />
-      <Header />
-      <Hero />
-      <EcosystemCards />
-      <Segments />
-      <ForEducation />
-      <ForSales />
-      <B2B />
-      <ContactCTA />
-      <Footer />
-      <BackToTop />
+    <div className="ap-page">
+      <ThemeMorph />
+      <Nav />
+      <main>
+        <Hero />
+        <Highlights />
+        <EducationScene />
+        <SalesDark />
+        <B2BSection />
+        <FinalCTA />
+      </main>
+      <FooterApple />
       <ContactModal />
     </div>
   );
