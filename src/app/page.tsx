@@ -1,5 +1,4 @@
 import AuroraBackground from "@/components/AuroraBackground";
-import CustomCursor from "@/components/CustomCursor";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import EcosystemCards from "@/components/EcosystemCards";
@@ -29,7 +28,6 @@ export default function Home() {
       <Footer />
       <BackToTop />
       <ContactModal />
-      <CustomCursor />
     </div>
   );
 }
