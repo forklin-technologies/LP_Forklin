@@ -16,7 +16,7 @@ const SEGMENTS = [
     icon: CapIcon,
     items: [
       { name: "Diário Digital", status: "Disponível" },
-      { name: "Biblioteca", status: "Em breve" },
+      { name: "Tutor IA", status: "Em breve" },
       { name: "Patrimônio", status: "Em breve" },
     ],
   },
@@ -42,7 +42,7 @@ export default function Segments() {
   return (
     <section
       id="segmentos"
-      className="relative bg-[var(--surface)] px-6 pb-16 pt-16 sm:px-10 sm:pb-24 sm:pt-24"
+      className="relative px-6 pb-16 pt-16 sm:px-10 sm:pb-24 sm:pt-24"
     >
       <div ref={ref} className="mx-auto max-w-7xl">
         <div

@@ -199,15 +199,7 @@ export default function EcosystemCards() {
   );
 
   return (
-    <section className="relative overflow-hidden bg-[var(--surface)] px-6 pb-16 pt-16 sm:px-10 sm:pb-24 sm:pt-24">
-      <Image
-        src="/images/hero-network.png"
-        alt=""
-        aria-hidden
-        fill
-        sizes="100vw"
-        className="pointer-events-none select-none object-cover opacity-40"
-      />
+    <section className="relative overflow-hidden px-6 pb-16 pt-16 sm:px-10 sm:pb-24 sm:pt-24">
 
       <div className="relative mx-auto max-w-7xl lg:w-fit">
         <h2

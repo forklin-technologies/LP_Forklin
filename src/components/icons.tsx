@@ -51,13 +51,6 @@ export function BookIcon(props: IconProps) {
   );
 }
 
-export function LibraryIcon(props: IconProps) {
-  return (
-    <Svg {...props}>
-      <path d="M4 20h16M5 20V9M9.5 20V9M14.5 20V9M19 20V9M3 9l9-5 9 5H3Z" {...stroke} />
-    </Svg>
-  );
-}
 
 export function BoxIcon(props: IconProps) {
   return (

@@ -14,7 +14,7 @@ export default function Logo({ className, light = false }: LogoProps) {
       width={1200}
       height={315}
       priority={!light}
-      className={`h-8 w-auto ${className ?? ""}`}
+      className={`w-auto ${className ?? "h-8"}`}
     />
   );
 }

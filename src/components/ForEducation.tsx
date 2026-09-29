@@ -2,7 +2,7 @@
 
 import { useInView } from "@/hooks/useInView";
 import SectionHeader from "./SectionHeader";
-import { ArrowRightIcon, BookIcon, BoxIcon, LibraryIcon } from "./icons";
+import { BookIcon, BoxIcon, SparkleIcon } from "./icons";
 
 const FEATURES = [
   "Chamada e frequência em poucos cliques",
@@ -13,9 +13,9 @@ const FEATURES = [
 const UPCOMING = [
   {
     number: "02",
-    icon: LibraryIcon,
-    title: "Biblioteca",
-    body: "Acervo organizado e controle de empréstimos e devoluções.",
+    icon: SparkleIcon,
+    title: "Tutor IA",
+    body: "Nossa plataforma de estudo com inteligência artificial, para apoiar alunos e professores.",
   },
   {
     number: "03",
@@ -64,7 +64,7 @@ export default function ForEducation() {
   return (
     <section
       id="for-education"
-      className="relative scroll-mt-8 bg-[var(--surface)] px-6 pb-16 pt-16 sm:px-10 sm:pb-24 sm:pt-24"
+      className="relative scroll-mt-8 px-6 pb-16 pt-16 sm:px-10 sm:pb-24 sm:pt-24"
     >
       <div className="mx-auto max-w-7xl">
         <div
@@ -113,15 +113,6 @@ export default function ForEducation() {
               Nasceu de um problema real de gestão escolar e hoje roda em produção,
               centralizando a rotina da sala de aula.
             </p>
-            <a
-              href="#contato"
-              className="group/cta mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-[var(--btn-primary)] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[var(--btn-primary-hover)]"
-            >
-              Conhecer o Diário Digital
-              <span className="transition-transform duration-300 group-hover/cta:translate-x-1">
-                <ArrowRightIcon />
-              </span>
-            </a>
 
             <ul className="mt-8 grid gap-3 border-t border-[var(--line)] pt-6 sm:grid-cols-3 lg:mt-auto">
               {FEATURES.map((feature, i) => (
@@ -164,21 +155,6 @@ export default function ForEducation() {
                   {item.title}
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-[var(--ink-soft)]">{item.body}</p>
-                <div className="mt-6 flex items-center justify-between border-t border-[var(--line)] pt-4">
-                  <span className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--ink-faint)]">
-                    <span className="h-1.5 w-1.5 rounded-full bg-[var(--ink-faint)]/60" />
-                    Em breve
-                  </span>
-                  <a
-                    href="#contato"
-                    className="group/link inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--btn-primary)]"
-                  >
-                    Me avise
-                    <span className="transition-transform duration-300 group-hover/link:translate-x-1">
-                      <ArrowRightIcon />
-                    </span>
-                  </a>
-                </div>
               </article>
             );
           })}

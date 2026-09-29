@@ -1,19 +1,14 @@
-import Image from "next/image";
 
 export default function Hero() {
   return (
     <section
       id="top"
-      className="relative overflow-hidden bg-[var(--surface)] px-6 pb-20 pt-28 sm:px-10 sm:pb-28 sm:pt-36"
+      className="relative flex min-h-[100svh] items-center justify-center overflow-hidden px-6 pb-16 pt-32 sm:px-10 sm:pb-20 sm:pt-36"
     >
-      <Image
-        src="/images/hero-network.png"
-        alt=""
+      {/* grade isométrica + cubos nas cores da marca (ecoa o símbolo da Forklin) */}
+      <div
         aria-hidden
-        fill
-        priority
-        sizes="100vw"
-        className="pointer-events-none select-none object-cover opacity-40"
+        className="pointer-events-none absolute inset-0 bg-[url('/images/hero-bg.svg')] bg-cover bg-center [mask-image:linear-gradient(to_bottom,black_75%,transparent)]"
       />
 
       <div className="relative mx-auto flex max-w-4xl flex-col items-center text-center">
@@ -36,7 +31,7 @@ export default function Hero() {
 
         <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row">
           <a
-            href="#contato"
+            href="#fale-conosco"
             className="inline-flex items-center justify-center rounded-full bg-[var(--btn-primary)] px-7 py-3.5 text-base font-semibold text-white transition hover:bg-[var(--btn-primary-hover)]"
           >
             Realizar Orçamento

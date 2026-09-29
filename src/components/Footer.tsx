@@ -1,39 +1,20 @@
-"use client";
-
+import type { ReactNode } from "react";
 import Logo from "./Logo";
-import { SOCIAL_LINKS } from "@/lib/contact";
+import {
+  CONTACT_EMAIL,
+  INSTAGRAM_URL,
+  PRIVACY_URL,
+  TERMS_URL,
+  WHATSAPP_DISPLAY,
+  WHATSAPP_URL,
+  YOUTUBE_URL,
+} from "@/lib/contact";
 
 type FooterLink = { label: string; href: string; external?: boolean };
 
-const COLUMNS: { title: string; links: FooterLink[] }[] = [
-  {
-    title: "Navegação",
-    links: [
-      { label: "Início", href: "#top" },
-      { label: "Segmentos", href: "#segmentos" },
-      { label: "Contato", href: "#contato" },
-    ],
-  },
-  {
-    title: "Segmentos",
-    links: [
-      { label: "For Education", href: "#for-education" },
-      { label: "For Sales", href: "#for-sales" },
-    ],
-  },
-  {
-    title: "Produtos",
-    links: [
-      { label: "Diário Digital", href: "#for-education" },
-      { label: "Biblioteca", href: "#for-education" },
-      { label: "Patrimônio", href: "#for-education" },
-    ],
-  },
-];
-
 function InstagramIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden>
       <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="1.8" />
       <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.8" />
       <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" />
@@ -41,12 +22,21 @@ function InstagramIcon() {
   );
 }
 
-function LinkedInIcon() {
+function YouTubeIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" strokeWidth="1.8" />
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <rect x="2.5" y="5.5" width="19" height="13" rx="4" stroke="currentColor" strokeWidth="1.8" />
+      <path d="m10 9.2 5 2.8-5 2.8V9.2Z" fill="currentColor" />
+    </svg>
+  );
+}
+
+function MailIcon() {
+  return (
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <rect x="3" y="5" width="18" height="14" rx="2.5" stroke="currentColor" strokeWidth="1.8" />
       <path
-        d="M7.5 10v6.5M7.5 7.5v.01M11.5 16.5V13c0-1.4.9-2.2 2-2.2s1.8.8 1.8 2.2v3.5"
+        d="m4 7 8 6 8-6"
         stroke="currentColor"
         strokeWidth="1.8"
         strokeLinecap="round"
@@ -56,41 +46,47 @@ function LinkedInIcon() {
   );
 }
 
-const SOCIAL_ICONS = { Instagram: InstagramIcon, LinkedIn: LinkedInIcon };
+// Só entra o que tiver valor em lib/contact.ts.
+const SOCIALS: { label: string; href: string; icon: () => ReactNode; external: boolean }[] = [
+  { label: "Instagram", href: INSTAGRAM_URL, icon: InstagramIcon, external: true },
+  { label: "YouTube", href: YOUTUBE_URL, icon: YouTubeIcon, external: true },
+  {
+    label: "E-mail",
+    href: CONTACT_EMAIL ? `mailto:${CONTACT_EMAIL}` : "",
+    icon: MailIcon,
+    external: false,
+  },
+].filter((social) => social.href);
 
-function ArrowUpIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path
-        d="M12 19V5M6 11l6-6 6 6"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function ArrowOutIcon() {
-  return (
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path
-        d="M7 17 17 7M9 7h8v8"
-        stroke="currentColor"
-        strokeWidth="2.2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
+const COLUMNS: { title: string; links: FooterLink[] }[] = [
+  {
+    title: "Navegação",
+    links: [
+      { label: "Início", href: "#top" },
+      { label: "Segmentos", href: "#segmentos" },
+      { label: "Fale conosco", href: "#fale-conosco" },
+    ],
+  },
+  {
+    title: "Segmentos",
+    links: [
+      { label: "For Education", href: "#for-education" },
+      { label: "For Sales", href: "#for-sales" },
+      { label: "B2B personalizado", href: "#b2b" },
+    ],
+  },
+  {
+    title: "Contato",
+    links: [
+      { label: WHATSAPP_DISPLAY, href: WHATSAPP_URL, external: true },
+      { label: CONTACT_EMAIL, href: CONTACT_EMAIL ? `mailto:${CONTACT_EMAIL}` : "" },
+      { label: "Termos e condições", href: TERMS_URL },
+      { label: "Política de privacidade", href: PRIVACY_URL },
+    ].filter((link) => link.href),
+  },
+].filter((col) => col.links.length > 0);
 
 export default function Footer() {
-  function scrollToTop() {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
   return (
     <footer className="relative overflow-hidden bg-gradient-to-r from-[var(--navy)] to-[var(--brand)] px-6 pt-16 text-white sm:px-10 sm:pt-20">
       <div className="relative mx-auto max-w-7xl">
@@ -101,21 +97,22 @@ export default function Footer() {
             </a>
             <p className="mt-4 text-sm leading-relaxed text-white/70">
               Personalização, desenvolvimento e suporte em um único ecossistema
-              de soluções para educação e vendas.
+              de soluções para educação, vendas e empresas.
             </p>
 
-            {SOCIAL_LINKS.length > 0 && (
-              <div className="mt-5 flex items-center gap-3">
-                {SOCIAL_LINKS.map((social) => {
-                  const Icon = SOCIAL_ICONS[social.label];
+            {SOCIALS.length > 0 && (
+              <div className="mt-6 flex items-center gap-3">
+                {SOCIALS.map((social) => {
+                  const Icon = social.icon;
                   return (
                     <a
                       key={social.label}
                       href={social.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      {...(social.external
+                        ? { target: "_blank", rel: "noopener noreferrer" }
+                        : {})}
                       aria-label={social.label}
-                      className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition hover:-translate-y-0.5 hover:bg-white/20"
+                      className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white/85 transition hover:-translate-y-0.5 hover:bg-white hover:text-[var(--btn-primary)]"
                     >
                       <Icon />
                     </a>
@@ -139,17 +136,12 @@ export default function Footer() {
                         {...(link.external
                           ? { target: "_blank", rel: "noopener noreferrer" }
                           : {})}
-                        className="group inline-flex items-center gap-1.5 text-sm text-white/70 transition hover:text-white"
+                        className="group inline-flex items-center gap-1.5 break-all text-sm text-white/70 transition hover:text-white"
                       >
                         <span className="relative">
                           {link.label}
                           <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-white/70 transition-transform duration-300 group-hover:scale-x-100" />
                         </span>
-                        {link.external && (
-                          <span className="opacity-50 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100">
-                            <ArrowOutIcon />
-                          </span>
-                        )}
                       </a>
                     </li>
                   ))}
@@ -159,26 +151,10 @@ export default function Footer() {
           </div>
         </div>
 
-
-        <div className="relative mt-16 border-t border-white/15 py-6">
-          <div className="flex flex-col items-center justify-between gap-4 text-xs text-white/60 sm:flex-row">
-            <p>
-              © {new Date().getFullYear()} Forklin Technologies. Todos os direitos
-              reservados.
-            </p>
-            {/* TODO: adicionar Política de Privacidade e Termos de Uso quando as páginas existirem */}
-            <button
-              type="button"
-              onClick={scrollToTop}
-              aria-label="Voltar ao topo"
-              className="group inline-flex items-center gap-2 rounded-full bg-white/10 py-1.5 pl-4 pr-1.5 text-white/80 transition hover:bg-white/20 hover:text-white"
-            >
-              Voltar ao topo
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/15 transition-transform duration-300 group-hover:-translate-y-0.5">
-                <ArrowUpIcon />
-              </span>
-            </button>
-          </div>
+        <div className="relative mt-16 border-t border-white/15 pb-24 pt-6 sm:pb-6">
+          <p className="text-center text-xs text-white/60 sm:text-left">
+            © {new Date().getFullYear()} Forklin Technologies. Todos os direitos reservados.
+          </p>
         </div>
       </div>
     </footer>

@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useInView } from "@/hooks/useInView";
 import SectionHeader from "./SectionHeader";
-import { ArrowRightIcon } from "./icons";
 
 const FRONTS = [
   {
@@ -57,7 +56,7 @@ export default function ForSales() {
   return (
     <section
       id="for-sales"
-      className="relative scroll-mt-8 bg-[var(--surface)] px-6 pb-16 pt-16 sm:px-10 sm:pb-24 sm:pt-24"
+      className="relative scroll-mt-8 px-6 pb-16 pt-16 sm:px-10 sm:pb-24 sm:pt-24"
     >
       <div className="mx-auto max-w-7xl">
         <div
@@ -73,17 +72,6 @@ export default function ForSales() {
               { text: "simples e organizada.", accent: true },
             ]}
             description="Estamos construindo soluções para deixar a rotina comercial mais eficiente. Conheça as frentes em que estamos trabalhando."
-            action={
-              <a
-                href="#contato"
-                className="group inline-flex items-center gap-2 rounded-full bg-[var(--btn-primary)] px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-[var(--btn-primary-hover)]"
-              >
-                Quero ser avisado
-                <span className="transition-transform duration-300 group-hover:translate-x-1">
-                  <ArrowRightIcon />
-                </span>
-              </a>
-            }
           />
         </div>
 
