@@ -90,17 +90,18 @@ export default function B2B() {
       id="b2b"
       className="relative scroll-mt-8 px-6 pb-16 pt-16 sm:px-10 sm:pb-24 sm:pt-24"
     >
-      <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1fr_1.05fr] lg:gap-16">
+      {/* As duas colunas têm a mesma altura: topo e base alinhados no desktop */}
+      <div className="mx-auto grid max-w-7xl items-stretch gap-12 lg:grid-cols-2 lg:gap-14">
         {/* Formulário (esquerda no desktop, depois do texto no celular) */}
         <div
           ref={formRef}
-          className={`order-2 transition-all duration-700 ease-out lg:order-1 ${
+          className={`order-2 flex transition-all duration-700 ease-out lg:order-1 ${
             formVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
           }`}
         >
-          <div className="relative rounded-3xl border border-[var(--line)] bg-[var(--surface)] p-6 shadow-[0_32px_64px_-40px_rgba(4,48,119,0.35)] sm:p-8">
+          <div className="relative flex w-full flex-col rounded-3xl border border-[var(--line)] bg-[var(--surface)] p-6 shadow-[0_32px_64px_-40px_rgba(4,48,119,0.35)] sm:p-8">
             {sent ? (
-              <div className="flex min-h-[28rem] flex-col items-center justify-center text-center animate-[panel-in_500ms_cubic-bezier(.16,1,.3,1)_both]">
+              <div className="flex min-h-[28rem] flex-1 flex-col items-center justify-center text-center animate-[panel-in_500ms_cubic-bezier(.16,1,.3,1)_both]">
                 <span className="flex h-14 w-14 items-center justify-center rounded-full bg-[var(--brand-light)] text-[var(--btn-primary)]">
                   <CheckIcon size={26} />
                 </span>
@@ -113,7 +114,7 @@ export default function B2B() {
                 </p>
               </div>
             ) : (
-              <form onSubmit={submit} noValidate className="relative space-y-5">
+              <form onSubmit={submit} noValidate className="relative flex flex-1 flex-col gap-5">
                 <Honeypot value={form.website} onChange={(v) => set("website", v)} />
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--btn-primary)]">
@@ -153,7 +154,7 @@ export default function B2B() {
                 <button
                   type="submit"
                   disabled={pending}
-                  className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[var(--btn-primary)] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[var(--btn-primary-hover)] disabled:opacity-60"
+                  className="group mt-auto inline-flex w-full items-center justify-center gap-2 rounded-full bg-[var(--btn-primary)] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[var(--btn-primary-hover)] disabled:opacity-60"
                 >
                   {pending ? "Enviando…" : "Quero uma solução sob medida"}
                   {!pending && (
@@ -168,7 +169,7 @@ export default function B2B() {
         </div>
 
         {/* Texto + como funciona (direita no desktop) */}
-        <div className="order-1 lg:order-2 lg:pt-4">
+        <div className="order-1 flex flex-col lg:order-2">
           <div
             ref={headerRef}
             className={`transition-all duration-700 ease-out ${
@@ -192,11 +193,12 @@ export default function B2B() {
             </p>
           </div>
 
-          <ol ref={stepsRef} className="mt-10 grid gap-4 sm:grid-cols-2">
+          {/* cards de passos com a mesma altura e ocupando até a base da coluna */}
+          <ol ref={stepsRef} className="mt-10 grid flex-1 auto-rows-fr gap-4 sm:grid-cols-2">
             {STEPS.map((step, i) => (
               <li
                 key={step.title}
-                className="group rounded-2xl border border-[var(--line)] bg-[var(--surface)] p-6 transition-[opacity,transform,border-color,box-shadow] duration-700 ease-[cubic-bezier(.16,1,.3,1)] hover:border-[var(--brand)]/35 hover:shadow-[0_24px_48px_-24px_rgba(4,48,119,0.25)]"
+                className="group flex flex-col rounded-2xl border border-[var(--line)] bg-[var(--surface)] p-6 transition-[opacity,transform,border-color,box-shadow] duration-700 ease-[cubic-bezier(.16,1,.3,1)] hover:border-[var(--brand)]/35 hover:shadow-[0_24px_48px_-24px_rgba(4,48,119,0.25)]"
                 style={{
                   opacity: stepsVisible ? 1 : 0,
                   transform: stepsVisible ? "none" : "translateY(16px)",

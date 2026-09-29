@@ -5,10 +5,10 @@ export default function Hero() {
       id="top"
       className="relative flex min-h-[100svh] items-center justify-center overflow-hidden px-6 pb-16 pt-32 sm:px-10 sm:pb-20 sm:pt-36"
     >
-      {/* grade isométrica + cubos nas cores da marca (ecoa o símbolo da Forklin) */}
+      {/* ilustrações isométricas: vendas, funil, educação e ecossistema */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[url('/images/hero-bg.svg')] bg-cover bg-center [mask-image:linear-gradient(to_bottom,black_75%,transparent)]"
+        className="pointer-events-none absolute inset-0 bg-[url('/images/hero-illustrations.svg')] bg-cover bg-center [mask-image:linear-gradient(to_bottom,black_75%,transparent)]"
       />
 
       <div className="relative mx-auto flex max-w-4xl flex-col items-center text-center">
