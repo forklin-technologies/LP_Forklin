@@ -31,6 +31,7 @@ const alturaVh = 100 + 70 + LEGENDAS.length * VH_POR_PASSO + VH_SAIDA; // altura
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const deviceRef = useRef<HTMLDivElement>(null);
+  const tituloRef = useRef<HTMLDivElement>(null);
   const [passo, setPasso] = useState(0);
 
   // Quanto o notebook pode crescer e de onde ele parte (abaixo do título).
@@ -50,11 +51,16 @@ export default function Hero() {
       const limiteLargura = ((vw < 768 ? 0.84 : 0.92) * vw) / w0;
       const k = Math.max(0.5, Math.min(limiteLargura, (vh - reserva - 130) / h0));
       el.style.setProperty("--dy", `${(-reserva / 2 + 16).toFixed(1)}px`);
-      const topoInicial = vh * (vw < 768 ? 0.7 : 0.74); // o notebook começa espiando embaixo do título
+      // o notebook começa espiando embaixo do título: na altura padrão da tela OU logo abaixo do texto,
+      // o que for mais baixo (o título quebra em mais linhas em telas estreitas e não pode ser coberto)
+      const t = tituloRef.current;
+      const fimDoTexto = t ? t.offsetTop + t.offsetHeight + 32 : 0;
+      const topoInicial = Math.max(vh * (vw < 768 ? 0.7 : 0.74), fimDoTexto);
       el.style.setProperty("--k", k.toFixed(4));
       el.style.setProperty("--y0", `${(topoInicial + h0 / 2 - vh / 2).toFixed(1)}px`);
     };
     medir();
+    void document.fonts?.ready.then(medir); // a fonte muda a altura do texto: recalcula quando carregar
     window.addEventListener("resize", medir);
     return () => window.removeEventListener("resize", medir);
   }, []);
@@ -108,6 +114,7 @@ export default function Hero() {
 
         {/* título */}
         <div
+          ref={tituloRef}
           className="absolute inset-x-0 top-[max(26svh,208px)] px-5 text-center"
           style={{
             opacity: "calc(1 - var(--z, 0) * 2.2)",
