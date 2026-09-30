@@ -12,7 +12,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { DeviceFrame } from "./DiarioDevice";
 import TelaVideo from "./TelaVideo";
 import { useScrollVars, type ScrollVars } from "./scroll";
-import { Logo3D, RevealText } from "./effects";
+import Image from "next/image";
+import { RevealText } from "./effects";
 
 const ZOOM = 0.28; // fração da cena usada pelo "crescer"
 const VH_POR_PASSO = 85; // rolagem (em % da altura da tela) para cada troca de legenda (o vídeo segue rodando)
@@ -77,14 +78,32 @@ export default function Hero() {
       <span id="for-education" className="absolute left-0" style={{ top: `${(alturaVh - 100) * (ZOOM + 0.05)}svh` }} />
 
       <div className="sticky top-0 h-[100svh] overflow-hidden">
-        {/* logos 3D em volta do título — se afastam enquanto o notebook cresce */}
-        <div className="pointer-events-none absolute inset-0" style={{ opacity: "calc(1 - var(--z, 0) * 1.6)" }}>
-          <Logo3D tamanho="clamp(70px, 9vw, 140px)" className="absolute left-[6%] top-[16%]" giro={-40} atraso={0}
-            style={{ translate: "calc(var(--z, 0) * -120px) calc(var(--z, 0) * -80px)" }} />
-          <Logo3D tamanho="clamp(90px, 12vw, 200px)" className="absolute right-[5%] top-[38%] hidden sm:block" giro={50} atraso={1.2}
-            style={{ translate: "calc(var(--z, 0) * 140px) calc(var(--z, 0) * -60px)" }} />
-          <Logo3D tamanho="clamp(40px, 5vw, 80px)" className="absolute left-[16%] top-[52%] hidden md:block opacity-70" giro={70} atraso={2.1}
-            style={{ translate: "calc(var(--z, 0) * -160px) 0" }} />
+        {/* fundo: um pórtico de colunas (duas, espelhadas) nas laterais, pintado no azul da marca e
+            apagado em degradê para o centro e para cima/baixo, então se funde ao fundo da página e
+            nunca disputa com o título nem com o notebook. Sobe devagar com a rolagem (profundidade)
+            e some junto com o notebook na saída. */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 select-none">
+          {(["left", "right"] as const).map((lado) => (
+            <Image
+              key={lado}
+              src="/images/fundoforklin.png"
+              alt=""
+              width={896}
+              height={1120}
+              priority
+              sizes="(min-width: 768px) 40vw, 60vw"
+              className={`absolute bottom-[-8svh] h-[92svh] w-auto max-w-none ${lado === "left" ? "-left-[26vw] sm:-left-[6vw]" : "-right-[26vw] sm:-right-[6vw]"}`}
+              style={{
+                opacity: "calc(0.14 * (1 - var(--x, 0)))",
+                transform: `${lado === "right" ? "scaleX(-1) " : ""}translateY(calc(var(--z, 0) * -7svh))`,
+                filter: "blur(0.4px)",
+                WebkitMaskImage: `linear-gradient(to ${lado === "left" ? "right" : "left"}, #000 18%, transparent 88%), linear-gradient(to bottom, transparent 0%, #000 22%, #000 72%, transparent 100%)`,
+                maskImage: `linear-gradient(to ${lado === "left" ? "right" : "left"}, #000 18%, transparent 88%), linear-gradient(to bottom, transparent 0%, #000 22%, #000 72%, transparent 100%)`,
+                WebkitMaskComposite: "source-in",
+                maskComposite: "intersect",
+              }}
+            />
+          ))}
         </div>
 
         {/* título */}
