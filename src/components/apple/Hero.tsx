@@ -70,7 +70,7 @@ export default function Hero() {
   return (
     <section id="top" ref={sectionRef} data-theme-section="light" className="relative" style={{ height: `${alturaVh}svh` }}>
       {/* âncora do menu "Educação": onde o notebook termina de crescer */}
-      <span id="for-education" className="absolute left-0" style={{ top: `${(alturaVh - 100) * ZOOM}svh` }} />
+      <span id="for-education" className="absolute left-0" style={{ top: `${(alturaVh - 100) * (ZOOM + 0.05)}svh` }} />
 
       <div className="sticky top-0 h-[100svh] overflow-hidden">
         {/* logos 3D em volta do título — se afastam enquanto o notebook cresce */}
@@ -143,7 +143,7 @@ export default function Hero() {
           }}
         >
           <div className="w-full max-w-[560px]">
-            <div className="relative min-h-[6.2em] sm:min-h-[5.4em]">
+            <div className="relative min-h-[7.6em] sm:min-h-[6.8em]">
               {PASSOS.map((p, i) => (
                 <div
                   key={i}
@@ -151,7 +151,8 @@ export default function Hero() {
                   className="absolute inset-0 transition-[opacity,transform] duration-500 ease-out"
                   style={{ opacity: i === passo ? 1 : 0, transform: i === passo ? "none" : "translateY(8px)" }}
                 >
-                  <p className="text-[19px] font-semibold tracking-[-0.01em] text-[#1d1d1f]">{p.titulo}</p>
+                  <p className="text-[13px] font-semibold text-[var(--ap-accent)]">{p.sistema.segmento} · {p.sistema.nome}</p>
+                  <p className="mt-0.5 text-[19px] font-semibold tracking-[-0.01em] text-[#1d1d1f]">{p.titulo}</p>
                   <p className="mt-1 text-[15px] leading-snug text-[#6e6e73]">{p.texto}</p>
                 </div>
               ))}

@@ -39,6 +39,17 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Texto da LP não é selecionável (pedido do usuário); campos de formulário continuam editáveis. */
+body {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+input, textarea, select, [contenteditable="true"] {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
 body {
   background-color: var(--surface);
   color: var(--ink);

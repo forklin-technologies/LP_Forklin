@@ -96,6 +96,53 @@ function segmentFromHash(hash: string): Segment | "" | null {
   return SEGMENTS.some((s) => s.value === rest) ? (rest as Segment) : "";
 }
 
+// "Plin" de confirmação: dois tons curtos sintetizados na hora (sem arquivo de áudio). O navegador
+// só libera som depois de um clique, então o contexto é criado/retomado no clique de "Enviar"
+// (prepararSom) e tocado quando o servidor confirma (tocarPlin).
+function criarAudio(): AudioContext | null {
+  try {
+    const AC = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+    return AC ? new AC() : null;
+  } catch {
+    return null;
+  }
+}
+
+// Check de sucesso desenhado em JavaScript (Web Animations API): o anel se desenha, o visto se
+// traça, o círculo dá um "pop" e uma onda se espalha. Com "reduzir movimento" aparece pronto.
+function SuccessCheck() {
+  const ring = useRef<SVGCircleElement>(null);
+  const tick = useRef<SVGPathElement>(null);
+  const pop = useRef<HTMLSpanElement>(null);
+  const wave = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const ease = "cubic-bezier(.16,1,.3,1)";
+    const draw = (el: SVGGeometryElement | null, delay: number, duration: number) => {
+      if (!el) return;
+      el.style.strokeDasharray = "1";
+      el.animate([{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], { duration, delay, easing: ease, fill: "backwards" });
+    };
+    draw(ring.current, 0, 550);
+    draw(tick.current, 380, 420);
+    pop.current?.animate([{ transform: "scale(.6)", opacity: 0 }, { transform: "scale(1.12)", opacity: 1, offset: 0.6 }, { transform: "scale(1)", opacity: 1 }], { duration: 620, easing: ease });
+    wave.current?.animate([{ transform: "scale(1)", opacity: 0.45 }, { transform: "scale(2.1)", opacity: 0 }], { duration: 900, delay: 420, easing: "ease-out", fill: "backwards" });
+  }, []);
+
+  return (
+    <span className="relative mx-auto flex h-16 w-16 items-center justify-center">
+      <span ref={wave} aria-hidden className="absolute inset-0 rounded-full bg-[#25D366]/40" />
+      <span ref={pop} className="relative flex h-16 w-16 items-center justify-center rounded-full bg-[var(--brand-light)] text-[var(--btn-primary)]">
+        <svg width="34" height="34" viewBox="0 0 34 34" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+          <circle ref={ring} cx="17" cy="17" r="14.5" pathLength={1} opacity="0.35" />
+          <path ref={tick} d="M10.5 17.5l4.8 4.8 8.4-9.6" pathLength={1} />
+        </svg>
+      </span>
+    </span>
+  );
+}
+
 export default function ContactModal() {
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(0);
@@ -104,6 +151,30 @@ export default function ContactModal() {
   const [sent, setSent] = useState(false);
   const [pending, startTransition] = useTransition();
   const panelRef = useRef<HTMLDivElement>(null);
+  const audioRef = useRef<AudioContext | null>(null);
+
+  function prepararSom() {
+    audioRef.current ??= criarAudio();
+    void audioRef.current?.resume();
+  }
+
+  function tocarPlin() {
+    const ctx = audioRef.current;
+    if (!ctx) return;
+    const t = ctx.currentTime;
+    for (const [freq, atraso] of [[1318.5, 0], [1975.5, 0.09]] as const) {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.0001, t + atraso);
+      gain.gain.exponentialRampToValueAtTime(0.22, t + atraso + 0.012);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + atraso + 0.7);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(t + atraso);
+      osc.stop(t + atraso + 0.75);
+    }
+  }
 
   const set = <K extends keyof Form>(key: K, value: Form[K]) =>
     setForm((f) => ({ ...f, [key]: value }));
@@ -175,6 +246,7 @@ export default function ContactModal() {
   }
 
   function submit() {
+    prepararSom(); // dentro do clique: libera o som para o "plin" quando o envio confirmar
     const message = validate(3);
     setError(message);
     if (message || !form.segment) return;
@@ -205,7 +277,10 @@ export default function ContactModal() {
         consent: form.consent,
         website: form.website,
       });
-      if (result.ok) setSent(true);
+      if (result.ok) {
+        setSent(true);
+        tocarPlin();
+      }
       else setError(result.error);
     });
   }
@@ -283,9 +358,7 @@ export default function ContactModal() {
 
           {sent ? (
             <div className="py-6 text-center animate-[panel-in_500ms_cubic-bezier(.16,1,.3,1)_both]">
-              <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[var(--brand-light)] text-[var(--btn-primary)]">
-                <CheckIcon size={26} />
-              </span>
+              <SuccessCheck />
               <p className="mx-auto mt-5 max-w-sm text-base leading-relaxed text-[var(--ink-soft)]">
                 Obrigado, {form.name.split(" ")[0]}! Nossa equipe vai analisar as
                 informações e retornar em breve.
@@ -294,9 +367,9 @@ export default function ContactModal() {
                 href={WHATSAPP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-6 inline-flex items-center gap-3 rounded-full border border-[var(--line)] py-2 pl-2 pr-5 text-sm font-semibold text-[var(--navy)] transition hover:border-[var(--ink)]"
+                className="group mt-6 inline-flex items-center gap-3 rounded-full border border-[var(--line)] py-2 pl-2 pr-5 text-sm font-semibold text-[var(--navy)] transition-colors duration-300 hover:border-[#25D366] hover:bg-[#25D366] hover:text-white focus-visible:border-[#25D366] focus-visible:bg-[#25D366] focus-visible:text-white"
               >
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#25D366] text-white">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#25D366] text-white transition-colors duration-300 group-hover:bg-white group-hover:text-[#25D366] group-focus-visible:bg-white group-focus-visible:text-[#25D366]">
                   <WhatsAppIcon size={16} />
                 </span>
                 Quer agilizar? Chame no WhatsApp
