@@ -201,11 +201,11 @@ export function DiarioScreen({ tela = "chamada" }: { tela?: TelaDiario }) {
 // Moldura do notebook — serve pra QUALQUER sistema (a tela vem como children).
 // A letra da tela acompanha a LARGURA DO NOTEBOOK (container query), não a da janela: o
 // mesmo aparelho aparece grande no hero e menor no bento, sempre proporcional.
-export function DeviceFrame({ children, label = "Tela do sistema", semSombra = false }: { children: React.ReactNode; label?: string; semSombra?: boolean }) {
+export function DeviceFrame({ children, label = "Tela do sistema", semSombra = false, aspecto = "aspect-[16/10]" }: { children: React.ReactNode; label?: string; semSombra?: boolean; aspecto?: string }) {
   return (
     <div className="mx-auto w-full text-left [container-type:inline-size]" aria-label={label} role="img">
       <div className={`rounded-[1.4rem] bg-[#1d1d1f] p-[0.9%] ${semSombra ? "" : "shadow-[0_40px_80px_-40px_rgba(0,0,0,0.45)]"}`}>
-        <div className="relative aspect-[16/10] overflow-hidden rounded-[0.9rem] bg-[#FAFAFD] text-[2.3cqw]">{children}</div>
+        <div className={`relative ${aspecto} overflow-hidden rounded-[0.9rem] bg-[#FAFAFD] text-[2.3cqw]`}>{children}</div>
       </div>
       <div className="mx-auto h-[0.9rem] w-[108%] -translate-x-[3.7%] rounded-b-[1.2rem] bg-gradient-to-b from-[#d6d6db] to-[#a9a9b1]" />
     </div>

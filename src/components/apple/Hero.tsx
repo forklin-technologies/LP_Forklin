@@ -5,24 +5,60 @@
 // A seção é alta e o conteúdo fica preso na tela. Rolando:
 //   1) z: 0 → 1  (primeiros ZOOM da cena) — o título some e o notebook sobe e CRESCE até quase
 //      cobrir a tela;
-//   2) depois, cada passo de cada sistema (sistemas.tsx) ganha o mesmo trecho de rolagem e a
-//      tela do notebook troca, com a legenda embaixo. Mais sistemas = cena mais longa, sozinha.
+//   2) depois o notebook fica cheio na tela enquanto o vídeo (tela do aparelho) roda em loop;
 // Tamanhos calculados no resize (quanto o notebook pode crescer sem passar da tela) e passados
 // como variáveis CSS; o movimento em si é só transform/opacity (barato, sem layout).
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { DeviceFrame } from "./DiarioDevice";
-import { PASSOS } from "./sistemas";
 import { useScrollVars, type ScrollVars } from "./scroll";
 import { Logo3D, RevealText } from "./effects";
 
 const ZOOM = 0.28; // fração da cena usada pelo "crescer"
-const VH_POR_PASSO = 85; // rolagem (em % da altura da tela) para cada troca de tela
+const VH_VIDEO = 90; // rolagem (em % da altura da tela) com o notebook cheio, enquanto o vídeo roda
 const VH_SAIDA = 55; // rolagem extra no fim: o notebook encolhe, sobe e sai de cena
+const alturaVh = 100 + 70 + VH_VIDEO + VH_SAIDA; // altura total da cena, em svh
+
+// O vídeo que roda na tela do notebook (public/videos/forklin-landing-loop.mp4): mudo, em loop e
+// sem controles (é a "tela" do aparelho). Só toca enquanto está visível — fora da tela pausa
+// (poupa bateria/CPU) — e com "reduzir movimento" fica parado no primeiro quadro.
+function HeroVideo() {
+  const ref = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    const v = ref.current;
+    if (!v) return;
+    v.muted = true; // garante o autoplay (navegadores só deixam tocar sozinho se estiver mudo)
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      v.pause();
+      return;
+    }
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) void v.play().catch(() => {});
+        else v.pause();
+      },
+      { threshold: 0.05 },
+    );
+    io.observe(v);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <video
+      ref={ref}
+      className="absolute inset-0 h-full w-full object-cover"
+      src="/videos/forklin-landing-loop.mp4"
+      autoPlay
+      muted
+      loop
+      playsInline
+      preload="auto"
+      aria-hidden
+    />
+  );
+}
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const deviceRef = useRef<HTMLDivElement>(null);
-  const [passo, setPasso] = useState(0);
 
   // Quanto o notebook pode crescer e de onde ele parte (abaixo do título).
   useEffect(() => {
@@ -34,13 +70,11 @@ export default function Hero() {
       const vh = window.innerHeight;
       const w0 = dev.offsetWidth;
       const h0 = dev.offsetHeight;
-      // espaço fixo embaixo para a legenda (título + texto + pontinhos) e folga em cima: o notebook
-      // nunca passa da tela nem encosta na legenda, seja qual for a resolução
-      const reserva = vw < 768 ? 200 : 180;
-      // celular: o notebook passa da largura da tela (as bordas cortam) para o texto da tela ficar legível
-      const limiteLargura = vw < 768 ? 1.6 : (vw * 0.92) / w0;
-      const k = Math.max(0.5, Math.min(limiteLargura, (vh - reserva - 150) / h0));
-      el.style.setProperty("--dy", `${(-reserva / 2 + 16).toFixed(1)}px`);
+      // sem legenda embaixo: o notebook fica centralizado, com folga fixa em cima e embaixo, e nunca
+      // passa da tela. No celular ele pode passar um pouco da largura (as bordas cortam).
+      const limiteLargura = vw < 768 ? 1.25 : (vw * 0.92) / w0;
+      const k = Math.max(0.5, Math.min(limiteLargura, (vh - 260) / h0));
+      el.style.setProperty("--dy", "0px");
       const topoInicial = vh * (vw < 768 ? 0.7 : 0.74); // o notebook começa espiando embaixo do título
       el.style.setProperty("--k", k.toFixed(4));
       el.style.setProperty("--y0", `${(topoInicial + h0 / 2 - vh / 2).toFixed(1)}px`);
@@ -50,8 +84,6 @@ export default function Hero() {
     return () => window.removeEventListener("resize", medir);
   }, []);
 
-  const alturaVh = 100 + 70 + PASSOS.length * VH_POR_PASSO + VH_SAIDA;
-
   const onUpdate = useCallback((v: ScrollVars) => {
     const el = sectionRef.current;
     if (!el) return;
@@ -60,12 +92,8 @@ export default function Hero() {
     const saida = VH_SAIDA / (alturaVh - 100); // fração do fim da cena usada pela saída
     const x = Math.max(0, (v.pin - (1 - saida)) / saida);
     el.style.setProperty("--x", x.toFixed(4));
-    const resto = Math.max(0, Math.min(1, (v.pin - ZOOM) / (1 - saida - ZOOM)));
-    setPasso(Math.min(PASSOS.length - 1, Math.floor(resto * PASSOS.length)));
   }, []);
   useScrollVars(sectionRef, onUpdate);
-
-  const atual = PASSOS[passo];
 
   return (
     <section id="top" ref={sectionRef} data-theme-section="light" className="relative" style={{ height: `${alturaVh}svh` }}>
@@ -119,51 +147,12 @@ export default function Hero() {
           }}
         >
           <div className="ap-float">
-            <DeviceFrame semSombra label={`${atual.sistema.nome}: ${atual.titulo}`}>
-              {PASSOS.map((p, i) => (
-                <div
-                  key={i}
-                  aria-hidden={i !== passo}
-                  className="absolute inset-0 transition-[opacity,transform] duration-700 ease-out"
-                  style={{ opacity: i === passo ? 1 : 0, transform: i === passo ? "none" : i < passo ? "translateY(-1.5%)" : "translateY(1.5%)" }}
-                >
-                  {p.tela}
-                </div>
-              ))}
+            <DeviceFrame semSombra aspecto="aspect-video" label="Demonstração dos sistemas da Forklin em vídeo">
+              <HeroVideo />
             </DeviceFrame>
           </div>
         </div>
 
-        {/* legenda do passo atual: texto solto embaixo do notebook, sem card por cima da tela */}
-        <div
-          className="absolute inset-x-0 bottom-[4svh] flex justify-center px-5 text-center"
-          style={{
-            opacity: "clamp(0, calc((var(--z, 0) - 0.8) * 5 - var(--x, 0) * 4), 1)",
-            transform: "translateY(calc((1 - var(--z, 0)) * 30px))",
-          }}
-        >
-          <div className="w-full max-w-[560px]">
-            <div className="relative min-h-[7.6em] sm:min-h-[6.8em]">
-              {PASSOS.map((p, i) => (
-                <div
-                  key={i}
-                  aria-hidden={i !== passo}
-                  className="absolute inset-0 transition-[opacity,transform] duration-500 ease-out"
-                  style={{ opacity: i === passo ? 1 : 0, transform: i === passo ? "none" : "translateY(8px)" }}
-                >
-                  <p className="text-[13px] font-semibold text-[var(--ap-accent)]">{p.sistema.segmento} · {p.sistema.nome}</p>
-                  <p className="mt-0.5 text-[19px] font-semibold tracking-[-0.01em] text-[#1d1d1f]">{p.titulo}</p>
-                  <p className="mt-1 text-[15px] leading-snug text-[#6e6e73]">{p.texto}</p>
-                </div>
-              ))}
-            </div>
-            <div className="mt-3 flex justify-center gap-1.5" aria-hidden>
-              {PASSOS.map((_, i) => (
-                <span key={i} className={`h-1.5 rounded-full transition-all duration-500 ${i === passo ? "w-5 bg-[var(--ap-accent)]" : "w-1.5 bg-[#c7c7cc]"}`} />
-              ))}
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   );
