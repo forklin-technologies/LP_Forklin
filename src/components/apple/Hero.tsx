@@ -34,8 +34,9 @@ export default function Hero() {
       const w0 = dev.offsetWidth;
       const h0 = dev.offsetHeight;
       // sem legenda embaixo: o notebook fica centralizado, com folga fixa em cima e embaixo, e nunca
-      // passa da tela. No celular ele pode passar um pouco da largura (as bordas cortam).
-      const limiteLargura = vw < 768 ? 1.25 : (vw * 0.92) / w0;
+      // passa da tela nem encosta nos cantos. A base do notebook é 8% mais larga que a moldura, por
+      // isso no celular a moldura ocupa 84% da largura (a base fica em ~91%, com margem dos lados).
+      const limiteLargura = ((vw < 768 ? 0.84 : 0.92) * vw) / w0;
       const k = Math.max(0.5, Math.min(limiteLargura, (vh - 260) / h0));
       el.style.setProperty("--dy", "0px");
       const topoInicial = vh * (vw < 768 ? 0.7 : 0.74); // o notebook começa espiando embaixo do título

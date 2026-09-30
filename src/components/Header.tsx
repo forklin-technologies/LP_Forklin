@@ -85,7 +85,7 @@ export default function Header() {
               className="flex items-center"
               onClick={() => setOpen(false)}
             >
-              <Logo className="h-8 sm:h-9" />
+              <Logo soEscrita className="h-7 sm:h-8" />
             </a>
 
             <nav className="hidden items-center gap-1 lg:flex">
