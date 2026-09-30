@@ -7,7 +7,7 @@ import Image from "next/image";
 import { useRef } from "react";
 import { useScrollVars } from "./scroll";
 import DiarioDevice from "./DiarioDevice";
-import { Logo3D, RevealText, SpotCard } from "./effects";
+import { RevealText, SpotCard } from "./effects";
 import { BookIcon, BoxIcon, SparkleIcon, TrendIcon } from "@/components/icons";
 
 type Status = "Em produção" | "Disponível" | "Em breve";
@@ -59,12 +59,11 @@ export default function Highlights() {
   useScrollVars(ref);
 
   return (
-    <section id="segmentos" data-theme-section="light" className="ap-section-alt relative overflow-hidden px-5 py-28 sm:py-36">
+    <section id="segmentos" data-theme-section="light" className="relative overflow-hidden px-5 py-28 sm:py-36">
       <div className="mx-auto max-w-[1024px]">
         <div className="relative">
           <RevealText texto="Um ecossistema. Várias soluções." destaque={["Várias", "soluções."]} className="ap-headline max-w-[16ch]" />
           <p className="ap-lead mt-4 max-w-[40ch]">Organizado por segmento, com soluções pensadas para a realidade de quem vai usar.</p>
-          <Logo3D tamanho="clamp(110px, 16vw, 230px)" giro={60} sobe={120} className="absolute -top-6 right-0 hidden md:block" />
         </div>
 
         <div ref={ref} className="mt-14 grid gap-4 md:grid-cols-3">
@@ -79,7 +78,7 @@ export default function Highlights() {
                 className={`ap-card group relative flex flex-col overflow-hidden ${c.area}`}
                 style={{ opacity: t, transform: `translateY(calc((1 - ${t}) * 40px))` }}
               >
-                {/* marca d'água da logo, como nos cards da LP anterior */}
+                {i === 0 && (
                 <Image
                   src="/images/logo-forklin-mark.png"
                   alt=""
@@ -88,6 +87,7 @@ export default function Highlights() {
                   height={446}
                   className="pointer-events-none absolute -right-5 -top-5 h-24 w-auto opacity-[0.06] transition-transform duration-700 group-hover:-rotate-12 group-hover:scale-110"
                 />
+                )}
                 <div className="relative flex items-center justify-between">
                   <span className="ap-icon-chip">
                     <Icone />

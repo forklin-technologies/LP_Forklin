@@ -17,6 +17,7 @@ import { Logo3D, RevealText } from "./effects";
 
 const ZOOM = 0.28; // fração da cena usada pelo "crescer"
 const VH_POR_PASSO = 85; // rolagem (em % da altura da tela) para cada troca de tela
+const VH_SAIDA = 55; // rolagem extra no fim: o notebook encolhe, sobe e sai de cena
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -33,7 +34,13 @@ export default function Hero() {
       const vh = window.innerHeight;
       const w0 = dev.offsetWidth;
       const h0 = dev.offsetHeight;
-      const k = Math.max(1, Math.min((vw * 0.96) / w0, (vh * 0.9) / h0));
+      // espaço fixo embaixo para a legenda (título + texto + pontinhos) e folga em cima: o notebook
+      // nunca passa da tela nem encosta na legenda, seja qual for a resolução
+      const reserva = vw < 768 ? 200 : 180;
+      // celular: o notebook passa da largura da tela (as bordas cortam) para o texto da tela ficar legível
+      const limiteLargura = vw < 768 ? 1.6 : (vw * 0.92) / w0;
+      const k = Math.max(0.5, Math.min(limiteLargura, (vh - reserva - 150) / h0));
+      el.style.setProperty("--dy", `${(-reserva / 2 + 16).toFixed(1)}px`);
       const topoInicial = vh * (vw < 768 ? 0.7 : 0.74); // o notebook começa espiando embaixo do título
       el.style.setProperty("--k", k.toFixed(4));
       el.style.setProperty("--y0", `${(topoInicial + h0 / 2 - vh / 2).toFixed(1)}px`);
@@ -43,17 +50,21 @@ export default function Hero() {
     return () => window.removeEventListener("resize", medir);
   }, []);
 
+  const alturaVh = 100 + 70 + PASSOS.length * VH_POR_PASSO + VH_SAIDA;
+
   const onUpdate = useCallback((v: ScrollVars) => {
     const el = sectionRef.current;
     if (!el) return;
     const z = Math.min(1, v.pin / ZOOM);
     el.style.setProperty("--z", z.toFixed(4));
-    const resto = Math.max(0, (v.pin - ZOOM) / (1 - ZOOM));
+    const saida = VH_SAIDA / (alturaVh - 100); // fração do fim da cena usada pela saída
+    const x = Math.max(0, (v.pin - (1 - saida)) / saida);
+    el.style.setProperty("--x", x.toFixed(4));
+    const resto = Math.max(0, Math.min(1, (v.pin - ZOOM) / (1 - saida - ZOOM)));
     setPasso(Math.min(PASSOS.length - 1, Math.floor(resto * PASSOS.length)));
   }, []);
   useScrollVars(sectionRef, onUpdate);
 
-  const alturaVh = 100 + 70 + PASSOS.length * VH_POR_PASSO;
   const atual = PASSOS[passo];
 
   return (
@@ -74,26 +85,25 @@ export default function Hero() {
 
         {/* título */}
         <div
-          className="absolute inset-x-0 top-[max(16svh,112px)] px-5 text-center"
+          className="absolute inset-x-0 top-[max(26svh,208px)] px-5 text-center"
           style={{
             opacity: "calc(1 - var(--z, 0) * 2.2)",
             transform: "translateY(calc(var(--z, 0) * -60px)) scale(calc(1 - var(--z, 0) * 0.06))",
           }}
         >
-          <p className="ap-eyebrow ap-fade-in">Um ecossistema, várias soluções</p>
           <RevealText
             as="h1"
             aoCarregar
             brilho
             texto="Seu ecossistema. Cresça com a Forklin."
             destaque={["Forklin."]}
-            className="ap-display mx-auto mt-3 max-w-[18ch]"
+            className="ap-display mx-auto max-w-[18ch]"
           />
           <p className="ap-lead ap-fade-in mx-auto mt-5 max-w-[34ch]" style={{ animationDelay: "0.7s" }}>
             Sistemas e produtos digitais que transformam ideias em resultados reais.
           </p>
           <div className="ap-fade-in mt-8 flex flex-wrap items-center justify-center gap-x-7 gap-y-4" style={{ animationDelay: "0.85s" }}>
-            <a href="#fale-conosco" className="ap-btn">Realizar orçamento</a>
+            <a href="#fale-conosco" className="ap-btn">Solicitar orçamento</a>
             <a href="#segmentos" className="ap-link">Conhecer os produtos <span aria-hidden>›</span></a>
           </div>
         </div>
@@ -104,11 +114,12 @@ export default function Hero() {
           className="absolute left-1/2 top-1/2 w-[min(900px,88vw)]"
           style={{
             transform:
-              "translate(-50%, -50%) translateY(calc(var(--y0, 60vh) * (1 - var(--z, 0)))) scale(calc(1 + (var(--k, 1) - 1) * var(--z, 0)))",
+              "translate(-50%, -50%) translateY(calc(var(--y0, 60vh) * (1 - var(--z, 0)))) translateY(calc(var(--z, 0) * var(--dy, -90px) - var(--x, 0) * 14svh)) scale(calc((1 + (var(--k, 1) - 1) * var(--z, 0)) * (1 - var(--x, 0) * 0.2)))",
+            opacity: "calc(1 - var(--x, 0))",
           }}
         >
           <div className="ap-float">
-            <DeviceFrame label={`${atual.sistema.nome}: ${atual.titulo}`}>
+            <DeviceFrame semSombra label={`${atual.sistema.nome}: ${atual.titulo}`}>
               {PASSOS.map((p, i) => (
                 <div
                   key={i}
@@ -123,23 +134,16 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* legenda do passo atual — aparece quando o notebook já cresceu */}
+        {/* legenda do passo atual: texto solto embaixo do notebook, sem card por cima da tela */}
         <div
-          className="absolute inset-x-0 bottom-[4svh] flex justify-center px-4"
-          style={{ opacity: "clamp(0, calc((var(--z, 0) - 0.8) * 5), 1)", transform: "translateY(calc((1 - var(--z, 0)) * 30px))" }}
+          className="absolute inset-x-0 bottom-[4svh] flex justify-center px-5 text-center"
+          style={{
+            opacity: "clamp(0, calc((var(--z, 0) - 0.8) * 5 - var(--x, 0) * 4), 1)",
+            transform: "translateY(calc((1 - var(--z, 0)) * 30px))",
+          }}
         >
-          <div className="ap-caption-card w-full max-w-[560px]">
-            <div className="flex items-center justify-between gap-4">
-              <p className="text-[13px] font-semibold text-[var(--ap-accent)]">
-                {atual.sistema.segmento} · {atual.sistema.nome}
-              </p>
-              <div className="flex gap-1.5" aria-hidden>
-                {PASSOS.map((_, i) => (
-                  <span key={i} className={`h-1.5 rounded-full transition-all duration-500 ${i === passo ? "w-5 bg-[var(--ap-accent)]" : "w-1.5 bg-[#c7c7cc]"}`} />
-                ))}
-              </div>
-            </div>
-            <div className="relative mt-1 min-h-[5.4em] sm:min-h-[4.6em]">
+          <div className="w-full max-w-[560px]">
+            <div className="relative min-h-[6.2em] sm:min-h-[5.4em]">
               {PASSOS.map((p, i) => (
                 <div
                   key={i}
@@ -148,8 +152,13 @@ export default function Hero() {
                   style={{ opacity: i === passo ? 1 : 0, transform: i === passo ? "none" : "translateY(8px)" }}
                 >
                   <p className="text-[19px] font-semibold tracking-[-0.01em] text-[#1d1d1f]">{p.titulo}</p>
-                  <p className="text-[15px] leading-snug text-[#6e6e73]">{p.texto}</p>
+                  <p className="mt-1 text-[15px] leading-snug text-[#6e6e73]">{p.texto}</p>
                 </div>
+              ))}
+            </div>
+            <div className="mt-3 flex justify-center gap-1.5" aria-hidden>
+              {PASSOS.map((_, i) => (
+                <span key={i} className={`h-1.5 rounded-full transition-all duration-500 ${i === passo ? "w-5 bg-[var(--ap-accent)]" : "w-1.5 bg-[#c7c7cc]"}`} />
               ))}
             </div>
           </div>

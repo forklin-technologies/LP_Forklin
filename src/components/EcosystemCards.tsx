@@ -204,14 +204,14 @@ export default function EcosystemCards() {
       <div className="relative mx-auto max-w-7xl lg:w-fit">
         <h2
           ref={headingRef}
-          className="font-semibold italic leading-tight text-[var(--ink)]"
+          className="ap-headline text-[#1d1d1f]"
         >
-          <span className="block min-h-[1em] whitespace-nowrap text-[clamp(1.5rem,5vw,3.75rem)]">
+          <span className="block min-h-[1em] whitespace-nowrap">
             {line1Shown}
             {typingLine1 && cursor}
           </span>
-          <span className="block min-h-[1em] whitespace-nowrap text-[clamp(1.5rem,5vw,3.75rem)]">
-            <span className="text-[var(--btn-primary)]">{line2Shown}</span>
+          <span className="block min-h-[1em] whitespace-nowrap">
+            <span className="text-[var(--ap-accent)]">{line2Shown}</span>
             {!typingLine1 && typedCount < HEADING_LENGTH && cursor}
           </span>
         </h2>

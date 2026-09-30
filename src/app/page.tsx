@@ -19,7 +19,8 @@ export default function Home() {
       <Header />
       <main>
         <Hero />
-        <div data-theme-section="light">
+        {/* sobe por cima do fim do hero: o notebook sai enquanto a próxima seção já chega (sem tela em branco) */}
+        <div data-theme-section="light" className="relative z-10 -mt-[55svh]">
           <EcosystemCards />
         </div>
         <Highlights />

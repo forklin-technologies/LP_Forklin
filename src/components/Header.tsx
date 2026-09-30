@@ -67,7 +67,7 @@ export default function Header() {
       />
       <header
         className={`fixed inset-x-0 top-3 z-50 px-3 transition-transform duration-500 ease-[cubic-bezier(.16,1,.3,1)] sm:top-4 sm:px-6 ${
-          hidden && !open ? "-translate-y-[140%]" : "translate-y-0"
+          hidden && !open ? "-translate-y-[260%]" : "translate-y-0"
         }`}
       >
         <div

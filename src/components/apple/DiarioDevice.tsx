@@ -29,7 +29,7 @@ function Chamada() {
         </div>
         <span className="rounded-full bg-[#5342A1] px-[0.9em] py-[0.35em] text-[0.55em] font-semibold text-white">Todos presentes</span>
       </div>
-      <div className="mt-[0.8em] overflow-hidden rounded-[0.6em] border border-[#E8E5F5] bg-white">
+      <div className="mt-[0.8em] flex min-h-0 flex-1 flex-col overflow-hidden rounded-[0.6em] border border-[#E8E5F5] bg-white">
         <div className="grid grid-cols-[1.4em_1fr_repeat(8,1.55em)_2.6em] items-center bg-[#F4F3FB] px-[0.6em] py-[0.45em] text-[0.5em] font-semibold text-[#6B6880]">
           <span>Nº</span>
           <span>Estudante</span>
@@ -43,7 +43,7 @@ function Chamada() {
           return (
             <div
               key={a.n}
-              className="grid grid-cols-[1.4em_1fr_repeat(8,1.55em)_2.6em] items-center border-t border-[#F0EEF8] px-[0.6em] py-[0.42em] text-[0.55em]"
+              className="grid flex-1 grid-cols-[1.4em_1fr_repeat(8,1.55em)_2.6em] items-center border-t border-[#F0EEF8] px-[0.6em] text-[0.55em]"
             >
               <span className="font-mono text-[#9A97AD]">{String(a.n).padStart(2, "0")}</span>
               <span className="truncate font-medium text-[#1A1A2E]">{a.nome}</span>
@@ -88,7 +88,7 @@ function Calendario() {
         </div>
         <span className="text-[0.55em] font-medium text-[#6B6880]">20 dias letivos</span>
       </div>
-      <div className="mt-[0.8em] grid grid-cols-7 gap-[0.35em] text-[0.5em]">
+      <div className="mt-[0.8em] grid min-h-0 flex-1 grid-cols-7 grid-rows-[auto_repeat(5,1fr)] gap-[0.4em] text-[0.55em]">
         {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map((d) => (
           <span key={d} className="text-center font-semibold text-[#9A97AD]">{d}</span>
         ))}
@@ -99,12 +99,12 @@ function Calendario() {
           return (
             <span
               key={d}
-              className={`flex h-[3.3em] flex-col justify-between overflow-hidden rounded-[0.45em] p-[0.35em] ${
+              className={`flex min-h-0 flex-col justify-between overflow-hidden rounded-[0.45em] p-[0.35em] ${
                 esp ? esp.cor : fimDeSemana ? "bg-[#F7F7FA] text-[#B8B6C6]" : "bg-white text-[#1A1A2E]"
               } border border-[#EEECF6]`}
             >
               <span className="font-semibold">{d}</span>
-              {esp && <span className="truncate text-[0.85em] font-semibold leading-tight">{esp.rotulo}</span>}
+              {esp && <span className="text-[0.8em] font-semibold leading-tight">{esp.rotulo}</span>}
             </span>
           );
         })}
@@ -136,20 +136,20 @@ function Historico() {
           ["Faltas no ano", "2"],
           ["Generalidades", "1"],
         ].map(([r, v]) => (
-          <div key={r} className="rounded-[0.6em] border border-[#E8E5F5] bg-white p-[0.6em]">
+          <div key={r} className="rounded-[0.6em] border border-[#E8E5F5] bg-white p-[0.9em]">
             <p className="text-[0.5em] font-medium text-[#6B6880]">{r}</p>
             <p className="text-[1.1em] font-bold text-[#1A1A2E]">{v}</p>
           </div>
         ))}
       </div>
-      <div className="mt-[0.6em] overflow-hidden rounded-[0.6em] border border-[#E8E5F5] bg-white text-[0.55em]">
+      <div className="mt-[0.6em] flex min-h-0 flex-1 flex-col overflow-hidden rounded-[0.6em] border border-[#E8E5F5] bg-white text-[0.55em]">
         <div className="grid grid-cols-[1fr_4em_4em] bg-[#F4F3FB] px-[0.8em] py-[0.45em] font-semibold text-[#6B6880]">
           <span>Componente</span>
           <span className="text-center">1º tri</span>
           <span className="text-center">2º tri</span>
         </div>
         {mencoes.map(([c, a, b]) => (
-          <div key={c} className="grid grid-cols-[1fr_4em_4em] border-t border-[#F0EEF8] px-[0.8em] py-[0.4em]">
+          <div key={c} className="grid flex-1 grid-cols-[1fr_4em_4em] items-center border-t border-[#F0EEF8] px-[0.8em]">
             <span className="text-[#1A1A2E]">{c}</span>
             <span className="text-center font-semibold text-[#5342A1]">{a}</span>
             <span className="text-center font-semibold text-[#5342A1]">{b}</span>
@@ -201,10 +201,10 @@ export function DiarioScreen({ tela = "chamada" }: { tela?: TelaDiario }) {
 // Moldura do notebook — serve pra QUALQUER sistema (a tela vem como children).
 // A letra da tela acompanha a LARGURA DO NOTEBOOK (container query), não a da janela: o
 // mesmo aparelho aparece grande no hero e menor no bento, sempre proporcional.
-export function DeviceFrame({ children, label = "Tela do sistema" }: { children: React.ReactNode; label?: string }) {
+export function DeviceFrame({ children, label = "Tela do sistema", semSombra = false }: { children: React.ReactNode; label?: string; semSombra?: boolean }) {
   return (
     <div className="mx-auto w-full text-left [container-type:inline-size]" aria-label={label} role="img">
-      <div className="rounded-[1.4rem] bg-[#1d1d1f] p-[0.9%] shadow-[0_40px_80px_-40px_rgba(0,0,0,0.45)]">
+      <div className={`rounded-[1.4rem] bg-[#1d1d1f] p-[0.9%] ${semSombra ? "" : "shadow-[0_40px_80px_-40px_rgba(0,0,0,0.45)]"}`}>
         <div className="relative aspect-[16/10] overflow-hidden rounded-[0.9rem] bg-[#FAFAFD] text-[2.3cqw]">{children}</div>
       </div>
       <div className="mx-auto h-[0.9rem] w-[108%] -translate-x-[3.7%] rounded-b-[1.2rem] bg-gradient-to-b from-[#d6d6db] to-[#a9a9b1]" />
