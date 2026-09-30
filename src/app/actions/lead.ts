@@ -27,15 +27,38 @@ const TO = process.env.LEAD_TO_EMAIL ?? "contato@forklin.com.br";
 const FROM = process.env.LEAD_FROM_EMAIL ?? "Site Forklin <site@forklin.com.br>";
 
 // Server Functions são endpoints públicos (POST direto): tudo é revalidado aqui.
-const RATE_LIMIT = { max: 5, windowMs: 10 * 60 * 1000 };
+// Só conta ENVIO DE VERDADE (depois de validar) e devolve a "vaga" se o envio falhar: erro de
+// digitação ou falha do Resend não pode gastar o limite de quem está tentando de boa-fé.
+// Se o servidor não repassar o IP do visitante, NÃO dá para agrupar todo mundo num balde só
+// ("desconhecido" com limite de 5 barrava visitantes diferentes): usa um teto global maior.
+const RATE_LIMIT = { max: 5, maxSemIp: 40, windowMs: 10 * 60 * 1000 };
 const hits = new Map<string, number[]>();
 
-function rateLimited(ip: string): boolean {
+function takeSlot(key: string, max: number): boolean {
   const now = Date.now();
-  const recent = (hits.get(ip) ?? []).filter((t) => now - t < RATE_LIMIT.windowMs);
+  const recent = (hits.get(key) ?? []).filter((t) => now - t < RATE_LIMIT.windowMs);
+  if (recent.length >= max) {
+    hits.set(key, recent);
+    return false;
+  }
   recent.push(now);
-  hits.set(ip, recent);
-  return recent.length > RATE_LIMIT.max;
+  hits.set(key, recent);
+  return true;
+}
+
+function giveSlotBack(key: string) {
+  const list = hits.get(key);
+  if (list?.length) list.pop();
+}
+
+async function clientKey(): Promise<{ key: string; max: number }> {
+  const h = await headers();
+  const ip =
+    h.get("cf-connecting-ip")?.trim() ||
+    h.get("x-real-ip")?.trim() ||
+    h.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    "";
+  return ip ? { key: ip, max: RATE_LIMIT.max } : { key: "sem-ip", max: RATE_LIMIT.maxSemIp };
 }
 
 function text(value: unknown, max = 200): string {
@@ -52,12 +75,6 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 export async function sendLead(input: LeadPayload): Promise<LeadResult> {
   // Robô preencheu o campo-isca: finge sucesso e não envia nada.
   if (text(input?.website)) return { ok: true };
-
-  const ip =
-    (await headers()).get("x-forwarded-for")?.split(",")[0]?.trim() ?? "desconhecido";
-  if (rateLimited(ip)) {
-    return { ok: false, error: "Muitos envios em pouco tempo. Tente novamente em alguns minutos." };
-  }
 
   const source = input?.source === "b2b" ? "b2b" : "fale-conosco";
   const segment = oneOf(input?.segment, SEGMENTS.map((s) => s.value)) as Segment | "";
@@ -103,6 +120,12 @@ export async function sendLead(input: LeadPayload): Promise<LeadResult> {
   if (!apiKey) {
     console.error("[lead] RESEND_API_KEY não configurada");
     return { ok: false, error: "Não foi possível enviar agora. Fale com a gente pelo WhatsApp." };
+  }
+
+  // Tudo validado: agora sim reserva uma vaga do limite (devolvida se o envio falhar).
+  const { key, max } = await clientKey();
+  if (!takeSlot(key, max)) {
+    return { ok: false, error: "Muitos envios em pouco tempo. Tente novamente em alguns minutos." };
   }
 
   const segmentLabel = SEGMENTS.find((s) => s.value === segment)?.label ?? segment;
@@ -157,10 +180,12 @@ export async function sendLead(input: LeadPayload): Promise<LeadResult> {
     });
     if (!response.ok) {
       console.error("[lead] Resend respondeu", response.status, await response.text());
+      giveSlotBack(key);
       return { ok: false, error: "Não foi possível enviar agora. Fale com a gente pelo WhatsApp." };
     }
   } catch (err) {
     console.error("[lead] falha ao chamar o Resend:", err);
+    giveSlotBack(key);
     return { ok: false, error: "Não foi possível enviar agora. Fale com a gente pelo WhatsApp." };
   }
 
