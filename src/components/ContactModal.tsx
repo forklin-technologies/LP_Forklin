@@ -177,14 +177,15 @@ function SuccessCheck() {
   const tick = useRef<SVGPathElement>(null);
   const pop = useRef<HTMLSpanElement>(null);
   const wave = useRef<HTMLSpanElement>(null);
+  const ringA = useRef<HTMLSpanElement>(null);
+  const ringB = useRef<HTMLSpanElement>(null);
+  const fill = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     const verde = "#25D366";
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      if (pop.current) {
-        pop.current.style.backgroundColor = verde;
-        pop.current.style.color = "#fff";
-      }
+      if (fill.current) fill.current.style.clipPath = "circle(75% at 50% 50%)";
+      if (pop.current) pop.current.style.color = "#fff";
       return;
     }
     const ease = "cubic-bezier(.16,1,.3,1)";
@@ -196,22 +197,27 @@ function SuccessCheck() {
     draw(ring.current, 0, 550);
     draw(tick.current, 380, 420);
     pop.current?.animate([{ transform: "scale(.6)", opacity: 0 }, { transform: "scale(1.12)", opacity: 1, offset: 0.6 }, { transform: "scale(1)", opacity: 1 }], { duration: 620, easing: ease });
-    // depois de o visto se traçar, o círculo vai enchendo de verde (fica verde ao terminar)
+    // Sequência: o visto se traça → dois anéis verdes vêm de fora AO ENCONTRO do círculo → no
+    // encontro o verde preenche o círculo a partir do centro e uma onda sai para fora.
+    const chegada = 1300;
+    const vem = [{ transform: "scale(2.9)", opacity: 0 }, { transform: "scale(1.9)", opacity: 0.9, offset: 0.45 }, { transform: "scale(1.02)", opacity: 1, offset: 0.9 }, { transform: "scale(0.96)", opacity: 0 }];
+    ringA.current?.animate(vem, { duration: 650, delay: chegada - 650, easing: "cubic-bezier(.32,0,.2,1)", fill: "backwards" });
+    ringB.current?.animate(vem, { duration: 650, delay: chegada - 650 + 130, easing: "cubic-bezier(.32,0,.2,1)", fill: "backwards" });
+    fill.current?.animate([{ clipPath: "circle(0% at 50% 50%)" }, { clipPath: "circle(75% at 50% 50%)" }], { duration: 650, delay: chegada - 40, easing: "cubic-bezier(.22,1,.36,1)", fill: "both" });
     if (pop.current) {
-      const cs = getComputedStyle(pop.current);
-      pop.current.animate(
-        [{ backgroundColor: cs.backgroundColor, color: cs.color }, { backgroundColor: verde, color: "#ffffff" }],
-        { duration: 700, delay: 650, easing: "cubic-bezier(.4,0,.2,1)", fill: "forwards" },
-      );
+      pop.current.animate([{ color: getComputedStyle(pop.current).color }, { color: "#ffffff" }], { duration: 400, delay: chegada + 60, easing: "ease-out", fill: "forwards" });
     }
-    wave.current?.animate([{ transform: "scale(1)", opacity: 0.45 }, { transform: "scale(2.1)", opacity: 0 }], { duration: 900, delay: 420, easing: "ease-out", fill: "backwards" });
+    wave.current?.animate([{ transform: "scale(1)", opacity: 0.55 }, { transform: "scale(2.5)", opacity: 0 }], { duration: 950, delay: chegada, easing: "ease-out", fill: "backwards" });
   }, []);
 
   return (
     <span className="relative mx-auto flex h-16 w-16 items-center justify-center">
       <span ref={wave} aria-hidden className="absolute inset-0 rounded-full bg-[#25D366]/40" />
-      <span ref={pop} className="relative flex h-16 w-16 items-center justify-center rounded-full bg-[var(--brand-light)] text-[var(--btn-primary)]">
-        <svg width="34" height="34" viewBox="0 0 34 34" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <span ref={ringA} aria-hidden className="absolute inset-0 rounded-full border-[3px] border-[#25D366]" />
+      <span ref={ringB} aria-hidden className="absolute inset-0 rounded-full border-2 border-[#25D366]/70" />
+      <span ref={pop} className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-[var(--brand-light)] text-[var(--btn-primary)]">
+        <span ref={fill} aria-hidden className="absolute inset-0 rounded-full bg-[#25D366]" style={{ clipPath: "circle(0% at 50% 50%)" }} />
+        <svg className="relative" width="34" height="34" viewBox="0 0 34 34" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
           <circle ref={ring} cx="17" cy="17" r="14.5" pathLength={1} opacity="0.35" />
           <path ref={tick} d="M10.5 17.5l4.8 4.8 8.4-9.6" pathLength={1} />
         </svg>
