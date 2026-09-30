@@ -10,6 +10,7 @@
 // como variáveis CSS; o movimento em si é só transform/opacity (barato, sem layout).
 import { useCallback, useEffect, useRef } from "react";
 import { DeviceFrame } from "./DiarioDevice";
+import TelaVideo from "./TelaVideo";
 import { useScrollVars, type ScrollVars } from "./scroll";
 import { Logo3D, RevealText } from "./effects";
 
@@ -17,44 +18,6 @@ const ZOOM = 0.28; // fração da cena usada pelo "crescer"
 const VH_VIDEO = 90; // rolagem (em % da altura da tela) com o notebook cheio, enquanto o vídeo roda
 const VH_SAIDA = 55; // rolagem extra no fim: o notebook encolhe, sobe e sai de cena
 const alturaVh = 100 + 70 + VH_VIDEO + VH_SAIDA; // altura total da cena, em svh
-
-// O vídeo que roda na tela do notebook (public/videos/forklin-landing-loop.mp4): mudo, em loop e
-// sem controles (é a "tela" do aparelho). Só toca enquanto está visível — fora da tela pausa
-// (poupa bateria/CPU) — e com "reduzir movimento" fica parado no primeiro quadro.
-function HeroVideo() {
-  const ref = useRef<HTMLVideoElement>(null);
-  useEffect(() => {
-    const v = ref.current;
-    if (!v) return;
-    v.muted = true; // garante o autoplay (navegadores só deixam tocar sozinho se estiver mudo)
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      v.pause();
-      return;
-    }
-    const io = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) void v.play().catch(() => {});
-        else v.pause();
-      },
-      { threshold: 0.05 },
-    );
-    io.observe(v);
-    return () => io.disconnect();
-  }, []);
-  return (
-    <video
-      ref={ref}
-      className="absolute inset-0 h-full w-full object-cover"
-      src="/videos/forklin-landing-loop.mp4"
-      autoPlay
-      muted
-      loop
-      playsInline
-      preload="auto"
-      aria-hidden
-    />
-  );
-}
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -148,7 +111,7 @@ export default function Hero() {
         >
           <div className="ap-float">
             <DeviceFrame semSombra aspecto="aspect-video" label="Demonstração dos sistemas da Forklin em vídeo">
-              <HeroVideo />
+              <TelaVideo />
             </DeviceFrame>
           </div>
         </div>

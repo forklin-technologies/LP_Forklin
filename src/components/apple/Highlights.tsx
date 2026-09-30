@@ -6,7 +6,8 @@
 import Image from "next/image";
 import { useRef } from "react";
 import { useScrollVars } from "./scroll";
-import DiarioDevice from "./DiarioDevice";
+import { DeviceFrame } from "./DiarioDevice";
+import TelaVideo from "./TelaVideo";
 import { RevealText, SpotCard } from "./effects";
 import { BookIcon, BoxIcon, SparkleIcon, TrendIcon } from "@/components/icons";
 
@@ -97,8 +98,10 @@ export default function Highlights() {
                 <p className="relative mt-6 text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--ap-accent)]">{c.rotulo}</p>
 
                 {i === 0 && (
-                  <div className="pointer-events-none relative mt-6 -mr-[48px] self-end transition-transform duration-700 group-hover:-translate-x-2 group-hover:-translate-y-1" style={{ width: "92%" }}>
-                    <DiarioDevice tela="historico" />
+                  <div className="pointer-events-none relative mt-6 w-full self-center transition-transform duration-700 group-hover:-translate-y-1">
+                    <DeviceFrame aspecto="aspect-video" label="Demonstração do Diário Digital em vídeo">
+                      <TelaVideo preload="metadata" />
+                    </DeviceFrame>
                   </div>
                 )}
 
