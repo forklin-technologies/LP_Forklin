@@ -104,7 +104,7 @@ export default function Header() {
               href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden items-center gap-2 rounded-full bg-[var(--btn-primary)] px-6 py-3.5 text-sm font-semibold text-white shadow-[0_8px_20px_-8px_rgba(4,48,119,0.6)] transition hover:bg-[var(--btn-primary-hover)] lg:inline-flex"
+              className="hidden items-center gap-2 rounded-full bg-[var(--ap-accent)] px-6 py-3.5 text-sm font-semibold text-white shadow-[0_8px_20px_-8px_rgba(36,81,255,0.55)] transition hover:bg-[var(--ap-accent-hover)] lg:inline-flex"
             >
               Entrar em contato
               <span aria-hidden>&rarr;</span>
@@ -161,7 +161,7 @@ export default function Header() {
                   {link.label}
                   <span
                     aria-hidden
-                    className="text-[var(--ink-faint)] transition-transform duration-300 group-hover:translate-x-1 group-hover:text-[var(--btn-primary)]"
+                    className="text-[var(--ink-faint)] transition-transform duration-300 group-hover:translate-x-1 group-hover:text-[var(--ap-accent)]"
                   >
                     &rarr;
                   </span>
@@ -172,7 +172,7 @@ export default function Header() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setOpen(false)}
-                className="mb-4 mt-3 inline-flex items-center justify-center gap-2 rounded-full bg-[var(--btn-primary)] px-5 py-3.5 text-sm font-semibold text-white transition-all duration-500 ease-[cubic-bezier(.16,1,.3,1)]"
+                className="mb-4 mt-3 inline-flex items-center justify-center gap-2 rounded-full bg-[var(--ap-accent)] px-5 py-3.5 text-sm font-semibold text-white transition-all duration-500 ease-[cubic-bezier(.16,1,.3,1)]"
                 style={{
                   opacity: open ? 1 : 0,
                   transform: open ? "none" : "translateY(-8px) scale(0.97)",

@@ -118,6 +118,7 @@ function WhatsAppCta() {
   const fill = useRef<HTMLSpanElement>(null);
   const st = useRef({ x: 0, y: 0, cx: 0, cy: 0, r: 0, cr: 0, on: false, raf: 0 });
 
+  const paintRef = useRef<() => void>(() => {});
   const paint = useCallback(() => {
     const s = st.current;
     const f = fill.current;
@@ -132,8 +133,12 @@ function WhatsAppCta() {
     f.style.maskImage = mask;
     f.style.webkitMaskImage = mask;
     const parado = Math.abs(s.x - s.cx) < 0.3 && Math.abs(s.y - s.cy) < 0.3 && Math.abs(s.r - s.cr) < 0.3;
-    s.raf = parado ? 0 : requestAnimationFrame(paint);
+    s.raf = parado ? 0 : requestAnimationFrame(() => paintRef.current());
   }, []);
+
+  useEffect(() => {
+    paintRef.current = paint;
+  }, [paint]);
 
   const kick = useCallback(() => {
     if (!st.current.raf) st.current.raf = requestAnimationFrame(paint);

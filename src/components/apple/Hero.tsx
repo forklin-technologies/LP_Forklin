@@ -8,20 +8,29 @@
 //   2) depois o notebook fica cheio na tela enquanto o vídeo (tela do aparelho) roda em loop;
 // Tamanhos calculados no resize (quanto o notebook pode crescer sem passar da tela) e passados
 // como variáveis CSS; o movimento em si é só transform/opacity (barato, sem layout).
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { DeviceFrame } from "./DiarioDevice";
 import TelaVideo from "./TelaVideo";
 import { useScrollVars, type ScrollVars } from "./scroll";
 import { Logo3D, RevealText } from "./effects";
 
 const ZOOM = 0.28; // fração da cena usada pelo "crescer"
-const VH_VIDEO = 90; // rolagem (em % da altura da tela) com o notebook cheio, enquanto o vídeo roda
+const VH_POR_PASSO = 85; // rolagem (em % da altura da tela) para cada troca de legenda (o vídeo segue rodando)
 const VH_SAIDA = 55; // rolagem extra no fim: o notebook encolhe, sobe e sai de cena
-const alturaVh = 100 + 70 + VH_VIDEO + VH_SAIDA; // altura total da cena, em svh
+
+// Legendas embaixo do notebook: trocam com a rolagem enquanto o vídeo roda em loop na tela.
+const SEGMENTO = "For Education · Diário Digital";
+const LEGENDAS = [
+  { titulo: "O dia a dia da escola num só lugar.", texto: "Painel, turmas, professores e relatórios reunidos numa única plataforma." },
+  { titulo: "No celular e no computador.", texto: "O mesmo sistema, do jeito que cada pessoa da escola usa: na sala de aula ou na secretaria." },
+  { titulo: "Menções, histórico e calendário.", texto: "Relatório de menções, emissão de histórico escolar e calendário letivo sempre à mão." },
+];
+const alturaVh = 100 + 70 + LEGENDAS.length * VH_POR_PASSO + VH_SAIDA; // altura total da cena, em svh
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const deviceRef = useRef<HTMLDivElement>(null);
+  const [passo, setPasso] = useState(0);
 
   // Quanto o notebook pode crescer e de onde ele parte (abaixo do título).
   useEffect(() => {
@@ -33,12 +42,13 @@ export default function Hero() {
       const vh = window.innerHeight;
       const w0 = dev.offsetWidth;
       const h0 = dev.offsetHeight;
-      // sem legenda embaixo: o notebook fica centralizado, com folga fixa em cima e embaixo, e nunca
-      // passa da tela nem encosta nos cantos. A base do notebook é 8% mais larga que a moldura, por
-      // isso no celular a moldura ocupa 84% da largura (a base fica em ~91%, com margem dos lados).
+      // espaço fixo embaixo para a legenda (segmento + título + texto + pontinhos) e folga em cima: o
+      // notebook nunca passa da tela nem encosta na legenda. A base do notebook é 8% mais larga que a
+      // moldura, por isso no celular a moldura ocupa 84% da largura (a base fica com margem dos lados).
+      const reserva = vw < 768 ? 210 : 180;
       const limiteLargura = ((vw < 768 ? 0.84 : 0.92) * vw) / w0;
-      const k = Math.max(0.5, Math.min(limiteLargura, (vh - 260) / h0));
-      el.style.setProperty("--dy", "0px");
+      const k = Math.max(0.5, Math.min(limiteLargura, (vh - reserva - 130) / h0));
+      el.style.setProperty("--dy", `${(-reserva / 2 + 16).toFixed(1)}px`);
       const topoInicial = vh * (vw < 768 ? 0.7 : 0.74); // o notebook começa espiando embaixo do título
       el.style.setProperty("--k", k.toFixed(4));
       el.style.setProperty("--y0", `${(topoInicial + h0 / 2 - vh / 2).toFixed(1)}px`);
@@ -56,6 +66,8 @@ export default function Hero() {
     const saida = VH_SAIDA / (alturaVh - 100); // fração do fim da cena usada pela saída
     const x = Math.max(0, (v.pin - (1 - saida)) / saida);
     el.style.setProperty("--x", x.toFixed(4));
+    const resto = Math.max(0, Math.min(1, (v.pin - ZOOM) / (1 - saida - ZOOM)));
+    setPasso(Math.min(LEGENDAS.length - 1, Math.floor(resto * LEGENDAS.length)));
   }, []);
   useScrollVars(sectionRef, onUpdate);
 
@@ -117,6 +129,37 @@ export default function Hero() {
           </div>
         </div>
 
+
+        {/* legenda do passo atual: texto solto embaixo do notebook (desktop e celular), sem card */}
+        <div
+          className="absolute inset-x-0 bottom-[4svh] flex justify-center px-5 text-center"
+          style={{
+            opacity: "clamp(0, calc((var(--z, 0) - 0.8) * 5 - var(--x, 0) * 4), 1)",
+            transform: "translateY(calc((1 - var(--z, 0)) * 30px))",
+          }}
+        >
+          <div className="w-full max-w-[560px]">
+            <div className="relative min-h-[8.2em] sm:min-h-[6.8em]">
+              {LEGENDAS.map((p, i) => (
+                <div
+                  key={p.titulo}
+                  aria-hidden={i !== passo}
+                  className="absolute inset-0 transition-[opacity,transform] duration-500 ease-out"
+                  style={{ opacity: i === passo ? 1 : 0, transform: i === passo ? "none" : "translateY(8px)" }}
+                >
+                  <p className="text-[13px] font-semibold text-[var(--ap-accent)]">{SEGMENTO}</p>
+                  <p className="mt-0.5 text-[19px] font-semibold tracking-[-0.01em] text-[#1d1d1f]">{p.titulo}</p>
+                  <p className="mt-1 text-[15px] leading-snug text-[#6e6e73]">{p.texto}</p>
+                </div>
+              ))}
+            </div>
+            <div className="mt-3 flex justify-center gap-1.5" aria-hidden>
+              {LEGENDAS.map((p, i) => (
+                <span key={p.titulo} className={`h-1.5 rounded-full transition-all duration-500 ${i === passo ? "w-5 bg-[var(--ap-accent)]" : "w-1.5 bg-[#c7c7cc]"}`} />
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
