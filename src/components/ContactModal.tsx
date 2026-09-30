@@ -110,6 +110,68 @@ function criarAudio(): AudioContext | null {
 
 // Check de sucesso desenhado em JavaScript (Web Animations API): o anel se desenha, o visto se
 // traça, o círculo dá um "pop" e uma onda se espalha. Com "reduzir movimento" aparece pronto.
+// "Quer agilizar?": no hover/foco o verde do WhatsApp se espalha a partir do ícone até completar o
+// botão (clip-path animado em JavaScript), o texto vira branco e o ícone inverte; ao sair, volta.
+function WhatsAppCta() {
+  const fill = useRef<HTMLSpanElement>(null);
+  const icon = useRef<HTMLSpanElement>(null);
+  const root = useRef<HTMLAnchorElement>(null);
+  const anims = useRef<Animation[]>([]);
+
+  useEffect(() => {
+    const f = fill.current, i = icon.current, r = root.current;
+    if (!f || !i || !r) return;
+    const dur = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 1 : 750;
+    const ease = "cubic-bezier(.65,0,.35,1)";
+    const verde = "#25D366";
+    const borda = getComputedStyle(r).borderColor;
+    const lista = [
+      f.animate([{ clipPath: "circle(0% at 32px 50%)" }, { clipPath: "circle(150% at 32px 50%)" }], { duration: dur, easing: ease, fill: "both" }),
+      i.animate([{ backgroundColor: verde, color: "#ffffff" }, { backgroundColor: "#ffffff", color: verde }], { duration: dur, easing: ease, fill: "both" }),
+      r.animate([{ borderColor: borda }, { borderColor: verde }], { duration: dur, easing: ease, fill: "both" }),
+    ];
+    lista.forEach((a) => a.pause());
+    anims.current = lista;
+    return () => lista.forEach((a) => a.cancel());
+  }, []);
+
+  const go = (dir: 1 | -1) =>
+    anims.current.forEach((a) => {
+      a.playbackRate = dir;
+      a.play();
+    });
+
+  return (
+    <a
+      ref={root}
+      href={WHATSAPP_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      onPointerEnter={() => go(1)}
+      onPointerLeave={() => go(-1)}
+      onFocus={() => go(1)}
+      onBlur={() => go(-1)}
+      className="relative mt-6 inline-flex items-center gap-3 overflow-hidden rounded-full border border-[var(--line)] py-2 pl-2 pr-5 text-sm font-semibold text-[var(--navy)]"
+    >
+      {/* camada verde: leva uma cópia BRANCA do texto, então as letras ficam brancas exatamente
+          onde o verde já chegou (sem cor "suja" no meio da animação) */}
+      <span
+        ref={fill}
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-[1] flex items-center gap-3 rounded-full bg-[#25D366] py-2 pl-2 pr-5 text-sm font-semibold text-white"
+        style={{ clipPath: "circle(0% at 32px 50%)" }}
+      >
+        <span className="h-8 w-8 shrink-0" />
+        <span>Quer agilizar? Chame no WhatsApp</span>
+      </span>
+      <span ref={icon} className="relative z-[2] flex h-8 w-8 items-center justify-center rounded-full bg-[#25D366] text-white">
+        <WhatsAppIcon size={16} />
+      </span>
+      <span className="relative z-0">Quer agilizar? Chame no WhatsApp</span>
+    </a>
+  );
+}
+
 function SuccessCheck() {
   const ring = useRef<SVGCircleElement>(null);
   const tick = useRef<SVGPathElement>(null);
@@ -117,7 +179,14 @@ function SuccessCheck() {
   const wave = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const verde = "#25D366";
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      if (pop.current) {
+        pop.current.style.backgroundColor = verde;
+        pop.current.style.color = "#fff";
+      }
+      return;
+    }
     const ease = "cubic-bezier(.16,1,.3,1)";
     const draw = (el: SVGGeometryElement | null, delay: number, duration: number) => {
       if (!el) return;
@@ -127,6 +196,14 @@ function SuccessCheck() {
     draw(ring.current, 0, 550);
     draw(tick.current, 380, 420);
     pop.current?.animate([{ transform: "scale(.6)", opacity: 0 }, { transform: "scale(1.12)", opacity: 1, offset: 0.6 }, { transform: "scale(1)", opacity: 1 }], { duration: 620, easing: ease });
+    // depois de o visto se traçar, o círculo vai enchendo de verde (fica verde ao terminar)
+    if (pop.current) {
+      const cs = getComputedStyle(pop.current);
+      pop.current.animate(
+        [{ backgroundColor: cs.backgroundColor, color: cs.color }, { backgroundColor: verde, color: "#ffffff" }],
+        { duration: 700, delay: 650, easing: "cubic-bezier(.4,0,.2,1)", fill: "forwards" },
+      );
+    }
     wave.current?.animate([{ transform: "scale(1)", opacity: 0.45 }, { transform: "scale(2.1)", opacity: 0 }], { duration: 900, delay: 420, easing: "ease-out", fill: "backwards" });
   }, []);
 
@@ -363,17 +440,7 @@ export default function ContactModal() {
                 Obrigado, {form.name.split(" ")[0]}! Nossa equipe vai analisar as
                 informações e retornar em breve.
               </p>
-              <a
-                href={WHATSAPP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group mt-6 inline-flex items-center gap-3 rounded-full border border-[var(--line)] py-2 pl-2 pr-5 text-sm font-semibold text-[var(--navy)] transition-colors duration-300 hover:border-[#25D366] hover:bg-[#25D366] hover:text-white focus-visible:border-[#25D366] focus-visible:bg-[#25D366] focus-visible:text-white"
-              >
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#25D366] text-white transition-colors duration-300 group-hover:bg-white group-hover:text-[#25D366] group-focus-visible:bg-white group-focus-visible:text-[#25D366]">
-                  <WhatsAppIcon size={16} />
-                </span>
-                Quer agilizar? Chame no WhatsApp
-              </a>
+              <WhatsAppCta />
             </div>
           ) : (
             <div key={step} className="space-y-5 animate-[panel-in_400ms_cubic-bezier(.16,1,.3,1)_both]">
