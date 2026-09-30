@@ -110,61 +110,89 @@ function criarAudio(): AudioContext | null {
 
 // Check de sucesso desenhado em JavaScript (Web Animations API): o anel se desenha, o visto se
 // traça, o círculo dá um "pop" e uma onda se espalha. Com "reduzir movimento" aparece pronto.
-// "Quer agilizar?": no hover/foco o verde do WhatsApp se espalha a partir do ícone até completar o
-// botão (clip-path animado em JavaScript), o texto vira branco e o ícone inverte; ao sair, volta.
+// "Quer agilizar?": o verde do WhatsApp aparece só ONDE O CURSOR ESTÁ (um "farol" que segue o
+// mouse com suavidade, feito em JavaScript). O texto branco fica dentro da camada verde, então as
+// letras só ficam brancas onde o verde chegou. Teclado (foco): o botão inteiro fica verde.
 function WhatsAppCta() {
-  const fill = useRef<HTMLSpanElement>(null);
-  const icon = useRef<HTMLSpanElement>(null);
   const root = useRef<HTMLAnchorElement>(null);
-  const anims = useRef<Animation[]>([]);
+  const fill = useRef<HTMLSpanElement>(null);
+  const st = useRef({ x: 0, y: 0, cx: 0, cy: 0, r: 0, cr: 0, on: false, raf: 0 });
 
-  useEffect(() => {
-    const f = fill.current, i = icon.current, r = root.current;
-    if (!f || !i || !r) return;
-    const dur = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 1 : 750;
-    const ease = "cubic-bezier(.65,0,.35,1)";
-    const verde = "#25D366";
-    const borda = getComputedStyle(r).borderColor;
-    const lista = [
-      f.animate([{ clipPath: "circle(0% at 32px 50%)" }, { clipPath: "circle(150% at 32px 50%)" }], { duration: dur, easing: ease, fill: "both" }),
-      i.animate([{ backgroundColor: verde, color: "#ffffff" }, { backgroundColor: "#ffffff", color: verde }], { duration: dur, easing: ease, fill: "both" }),
-      r.animate([{ borderColor: borda }, { borderColor: verde }], { duration: dur, easing: ease, fill: "both" }),
-    ];
-    lista.forEach((a) => a.pause());
-    anims.current = lista;
-    return () => lista.forEach((a) => a.cancel());
+  const paint = useCallback(() => {
+    const s = st.current;
+    const f = fill.current;
+    if (!f) return;
+    const reduzir = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const kPos = reduzir ? 1 : 0.2;
+    const kRaio = reduzir ? 1 : 0.13;
+    s.cx += (s.x - s.cx) * kPos;
+    s.cy += (s.y - s.cy) * kPos;
+    s.cr += (s.r - s.cr) * kRaio;
+    const mask = `radial-gradient(circle ${Math.max(s.cr, 0.01).toFixed(1)}px at ${s.cx.toFixed(1)}px ${s.cy.toFixed(1)}px, #000 55%, transparent 100%)`;
+    f.style.maskImage = mask;
+    f.style.webkitMaskImage = mask;
+    const parado = Math.abs(s.x - s.cx) < 0.3 && Math.abs(s.y - s.cy) < 0.3 && Math.abs(s.r - s.cr) < 0.3;
+    s.raf = parado ? 0 : requestAnimationFrame(paint);
   }, []);
 
-  const go = (dir: 1 | -1) =>
-    anims.current.forEach((a) => {
-      a.playbackRate = dir;
-      a.play();
-    });
+  const kick = useCallback(() => {
+    if (!st.current.raf) st.current.raf = requestAnimationFrame(paint);
+  }, [paint]);
 
+  useEffect(() => () => cancelAnimationFrame(st.current.raf), []);
+
+  const move = (e: React.PointerEvent) => {
+    const b = root.current?.getBoundingClientRect();
+    if (!b) return;
+    const s = st.current;
+    s.x = e.clientX - b.left;
+    s.y = e.clientY - b.top;
+    if (!s.on) {
+      s.on = true;
+      s.cx = s.x; // o verde nasce onde o cursor entrou
+      s.cy = s.y;
+    }
+    s.r = 115;
+    kick();
+  };
+  const sair = () => {
+    const s = st.current;
+    s.on = false;
+    s.r = 0;
+    kick();
+  };
+  const foco = () => {
+    const s = st.current;
+    s.x = s.cx = 32;
+    s.y = s.cy = (root.current?.offsetHeight ?? 48) / 2;
+    s.r = 480;
+    kick();
+  };
+
+  const semMascara = "radial-gradient(circle 0.01px at 0px 0px, #000 55%, transparent 100%)";
   return (
     <a
       ref={root}
       href={WHATSAPP_URL}
       target="_blank"
       rel="noopener noreferrer"
-      onPointerEnter={() => go(1)}
-      onPointerLeave={() => go(-1)}
-      onFocus={() => go(1)}
-      onBlur={() => go(-1)}
+      onPointerEnter={move}
+      onPointerMove={move}
+      onPointerLeave={sair}
+      onFocus={foco}
+      onBlur={sair}
       className="relative mt-6 inline-flex items-center gap-3 overflow-hidden rounded-full border border-[var(--line)] py-2 pl-2 pr-5 text-sm font-semibold text-[var(--navy)]"
     >
-      {/* camada verde: leva uma cópia BRANCA do texto, então as letras ficam brancas exatamente
-          onde o verde já chegou (sem cor "suja" no meio da animação) */}
       <span
         ref={fill}
         aria-hidden
         className="pointer-events-none absolute inset-0 z-[1] flex items-center gap-3 rounded-full bg-[#25D366] py-2 pl-2 pr-5 text-sm font-semibold text-white"
-        style={{ clipPath: "circle(0% at 32px 50%)" }}
+        style={{ maskImage: semMascara, WebkitMaskImage: semMascara }}
       >
         <span className="h-8 w-8 shrink-0" />
         <span>Quer agilizar? Chame no WhatsApp</span>
       </span>
-      <span ref={icon} className="relative z-[2] flex h-8 w-8 items-center justify-center rounded-full bg-[#25D366] text-white">
+      <span className="relative z-[2] flex h-8 w-8 items-center justify-center rounded-full bg-[#25D366] text-white">
         <WhatsAppIcon size={16} />
       </span>
       <span className="relative z-0">Quer agilizar? Chame no WhatsApp</span>
@@ -177,48 +205,38 @@ function SuccessCheck() {
   const tick = useRef<SVGPathElement>(null);
   const pop = useRef<HTMLSpanElement>(null);
   const wave = useRef<HTMLSpanElement>(null);
-  const ringA = useRef<HTMLSpanElement>(null);
-  const ringB = useRef<HTMLSpanElement>(null);
-  const fill = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    const verde = "#25D366";
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      if (fill.current) fill.current.style.clipPath = "circle(75% at 50% 50%)";
-      if (pop.current) pop.current.style.color = "#fff";
-      return;
-    }
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const ease = "cubic-bezier(.16,1,.3,1)";
     const draw = (el: SVGGeometryElement | null, delay: number, duration: number) => {
       if (!el) return;
       el.style.strokeDasharray = "1";
       el.animate([{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], { duration, delay, easing: ease, fill: "backwards" });
     };
-    draw(ring.current, 0, 550);
-    draw(tick.current, 380, 420);
-    pop.current?.animate([{ transform: "scale(.6)", opacity: 0 }, { transform: "scale(1.12)", opacity: 1, offset: 0.6 }, { transform: "scale(1)", opacity: 1 }], { duration: 620, easing: ease });
-    // Sequência: o visto se traça → dois anéis verdes vêm de fora AO ENCONTRO do círculo → no
-    // encontro o verde preenche o círculo a partir do centro e uma onda sai para fora.
-    const chegada = 1300;
-    const vem = [{ transform: "scale(2.9)", opacity: 0 }, { transform: "scale(1.9)", opacity: 0.9, offset: 0.45 }, { transform: "scale(1.02)", opacity: 1, offset: 0.9 }, { transform: "scale(0.96)", opacity: 0 }];
-    ringA.current?.animate(vem, { duration: 650, delay: chegada - 650, easing: "cubic-bezier(.32,0,.2,1)", fill: "backwards" });
-    ringB.current?.animate(vem, { duration: 650, delay: chegada - 650 + 130, easing: "cubic-bezier(.32,0,.2,1)", fill: "backwards" });
-    fill.current?.animate([{ clipPath: "circle(0% at 50% 50%)" }, { clipPath: "circle(75% at 50% 50%)" }], { duration: 650, delay: chegada - 40, easing: "cubic-bezier(.22,1,.36,1)", fill: "both" });
-    if (pop.current) {
-      pop.current.animate([{ color: getComputedStyle(pop.current).color }, { color: "#ffffff" }], { duration: 400, delay: chegada + 60, easing: "ease-out", fill: "forwards" });
-    }
-    wave.current?.animate([{ transform: "scale(1)", opacity: 0.55 }, { transform: "scale(2.5)", opacity: 0 }], { duration: 950, delay: chegada, easing: "ease-out", fill: "backwards" });
+    // entra com um pulo e um giro completo; o visto se traça quando ele pousa
+    pop.current?.animate(
+      [
+        { transform: "translateY(26px) rotate(-360deg) scale(.4)", opacity: 0, offset: 0 },
+        { transform: "translateY(-30px) rotate(-180deg) scale(1.08)", opacity: 1, offset: 0.45 },
+        { transform: "translateY(0) rotate(0deg) scale(1)", opacity: 1, offset: 0.75 },
+        { transform: "translateY(-7px) rotate(0deg) scale(1)", opacity: 1, offset: 0.88 },
+        { transform: "translateY(0) rotate(0deg) scale(1)", opacity: 1, offset: 1 },
+      ],
+      { duration: 950, easing: "cubic-bezier(.3,.7,.3,1)", fill: "backwards" },
+    );
+    draw(ring.current, 500, 500);
+    draw(tick.current, 760, 420);
+    wave.current?.animate([{ transform: "scale(1)", opacity: 0.5 }, { transform: "scale(2.3)", opacity: 0 }], { duration: 900, delay: 720, easing: "ease-out", fill: "backwards" });
   }, []);
 
   return (
     <span className="relative mx-auto flex h-16 w-16 items-center justify-center">
-      <span ref={wave} aria-hidden className="absolute inset-0 rounded-full bg-[#25D366]/40" />
-      <span ref={ringA} aria-hidden className="absolute inset-0 rounded-full border-[3px] border-[#25D366]" />
-      <span ref={ringB} aria-hidden className="absolute inset-0 rounded-full border-2 border-[#25D366]/70" />
-      <span ref={pop} className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-[var(--brand-light)] text-[var(--btn-primary)]">
-        <span ref={fill} aria-hidden className="absolute inset-0 rounded-full bg-[#25D366]" style={{ clipPath: "circle(0% at 50% 50%)" }} />
-        <svg className="relative" width="34" height="34" viewBox="0 0 34 34" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-          <circle ref={ring} cx="17" cy="17" r="14.5" pathLength={1} opacity="0.35" />
+      <span ref={wave} aria-hidden className="absolute inset-0 rounded-full border-2 border-[#25D366]" />
+      {/* botão claro (branco/cinza) com a VOLTA verde; o resto da cena não fica verde */}
+      <span ref={pop} className="relative flex h-16 w-16 items-center justify-center rounded-full border-[3px] border-[#25D366] bg-[#f3f4f6] text-[#25D366]">
+        <svg width="34" height="34" viewBox="0 0 34 34" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+          <circle ref={ring} cx="17" cy="17" r="14.5" pathLength={1} opacity="0" />
           <path ref={tick} d="M10.5 17.5l4.8 4.8 8.4-9.6" pathLength={1} />
         </svg>
       </span>
@@ -251,7 +269,7 @@ export default function ContactModal() {
       osc.type = "sine";
       osc.frequency.value = freq;
       gain.gain.setValueAtTime(0.0001, t + atraso);
-      gain.gain.exponentialRampToValueAtTime(0.22, t + atraso + 0.012);
+      gain.gain.exponentialRampToValueAtTime(0.07, t + atraso + 0.012);
       gain.gain.exponentialRampToValueAtTime(0.0001, t + atraso + 0.7);
       osc.connect(gain).connect(ctx.destination);
       osc.start(t + atraso);
