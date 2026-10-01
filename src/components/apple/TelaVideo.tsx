@@ -1,14 +1,22 @@
 "use client";
 
-// O vídeo que roda na tela dos notebooks da LP (public/videos/forklin-landing-loop.mp4): mudo, em
-// loop e sem controles (é a "tela" do aparelho). Só toca enquanto está visível — fora da tela
-// pausa (poupa bateria/CPU) — e com "reduzir movimento" fica parado no primeiro quadro.
-// O mesmo arquivo é usado no hero e no card de For Education: o navegador baixa uma vez só.
+// O vídeo que roda na tela dos notebooks da LP: mudo, em loop e sem controles (é a "tela" do
+// aparelho). Só toca enquanto está visível — fora da tela pausa (poupa bateria/CPU) — e com
+// "reduzir movimento" fica parado no primeiro quadro.
+// Cada notebook escolhe o seu vídeo: o hero usa o padrão (VIDEO_TELA, videosession1.mp4) e o
+// card do Diário Digital em For Education usa VIDEO_DIARIO.
 import { useEffect, useRef } from "react";
 
-export const VIDEO_TELA = "/videos/forklin-landing-loop.mp4";
+export const VIDEO_TELA = "/videos/videosession1.mp4";
+export const VIDEO_DIARIO = "/videos/forklin-landing-loop.mp4";
 
-export default function TelaVideo({ preload = "auto" }: { preload?: "auto" | "metadata" }) {
+export default function TelaVideo({
+  src = VIDEO_TELA,
+  preload = "auto",
+}: {
+  src?: string;
+  preload?: "auto" | "metadata";
+}) {
   const ref = useRef<HTMLVideoElement>(null);
   useEffect(() => {
     const v = ref.current;
@@ -32,7 +40,7 @@ export default function TelaVideo({ preload = "auto" }: { preload?: "auto" | "me
     <video
       ref={ref}
       className="absolute inset-0 h-full w-full object-cover"
-      src={VIDEO_TELA}
+      src={src}
       autoPlay
       muted
       loop

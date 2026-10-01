@@ -7,7 +7,7 @@ import Image from "next/image";
 import { useRef } from "react";
 import { useScrollVars } from "./scroll";
 import { DeviceFrame } from "./DiarioDevice";
-import TelaVideo from "./TelaVideo";
+import TelaVideo, { VIDEO_DIARIO } from "./TelaVideo";
 import { RevealText, SpotCard } from "./effects";
 import { BookIcon, BoxIcon, SparkleIcon, TrendIcon } from "@/components/icons";
 
@@ -100,7 +100,7 @@ export default function Highlights() {
                 {i === 0 && (
                   <div className="pointer-events-none relative mt-6 w-full self-center transition-transform duration-700 group-hover:-translate-y-1">
                     <DeviceFrame aspecto="aspect-video" label="Demonstração do Diário Digital em vídeo">
-                      <TelaVideo preload="metadata" />
+                      <TelaVideo src={VIDEO_DIARIO} preload="metadata" />
                     </DeviceFrame>
                   </div>
                 )}
