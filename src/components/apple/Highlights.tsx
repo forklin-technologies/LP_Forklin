@@ -20,7 +20,7 @@ const CARDS: Card[] = [
     titulo: "Diário Digital",
     texto: "Chamada, calendário, generalidades e menções. A rotina da sala de aula num só lugar.",
     status: "Em produção",
-    href: "#for-education",
+    href: "#fale-conosco-education",
     area: "md:col-span-2 md:row-span-2",
     icone: () => <BookIcon size={20} />,
   },
@@ -75,6 +75,7 @@ export default function Highlights() {
               <SpotCard
                 as="a"
                 key={c.titulo}
+                id={i === 0 ? "for-education" : undefined} // âncora do menu "Educação"
                 href={c.href}
                 className={`ap-card group relative flex flex-col overflow-hidden ${c.area}`}
                 style={{ opacity: t, transform: `translateY(calc((1 - ${t}) * 40px))` }}

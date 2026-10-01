@@ -19,12 +19,13 @@ const ZOOM = 0.28; // fração da cena usada pelo "crescer"
 const VH_POR_PASSO = 85; // rolagem (em % da altura da tela) para cada troca de legenda (o vídeo segue rodando)
 const VH_SAIDA = 55; // rolagem extra no fim: o notebook encolhe, sobe e sai de cena
 
-// Legendas embaixo do notebook: trocam com a rolagem enquanto o vídeo roda em loop na tela.
-const SEGMENTO = "For Education · Diário Digital";
+// Legendas embaixo do notebook: trocam com a rolagem enquanto o vídeo roda em loop na tela. O vídeo
+// mostra o painel do usuário da Forklin (visão geral, usuários, convites e a versão no celular).
+const SEGMENTO = "Painel do usuário";
 const LEGENDAS = [
-  { titulo: "O dia a dia da escola num só lugar.", texto: "Painel, turmas, professores e relatórios reunidos numa única plataforma." },
-  { titulo: "No celular e no computador.", texto: "O mesmo sistema, do jeito que cada pessoa da escola usa: na sala de aula ou na secretaria." },
-  { titulo: "Menções, histórico e calendário.", texto: "Relatório de menções, emissão de histórico escolar e calendário letivo sempre à mão." },
+  { titulo: "Seus acessos num só painel.", texto: "Usuários, produtos e convites de relance, com cada sistema a um clique." },
+  { titulo: "Gestão de usuários e convites.", texto: "Crie usuários, defina função e equipe, envie convites e acompanhe cada aceite." },
+  { titulo: "No celular e no computador.", texto: "O mesmo painel, na mesa de trabalho ou na palma da mão." },
 ];
 const alturaVh = 100 + 70 + LEGENDAS.length * VH_POR_PASSO + VH_SAIDA; // altura total da cena, em svh
 
@@ -80,9 +81,6 @@ export default function Hero() {
 
   return (
     <section id="top" ref={sectionRef} data-theme-section="light" className="relative" style={{ height: `${alturaVh}svh` }}>
-      {/* âncora do menu "Educação": onde o notebook termina de crescer */}
-      <span id="for-education" className="absolute left-0" style={{ top: `${(alturaVh - 100) * (ZOOM + 0.05)}svh` }} />
-
       <div className="sticky top-0 h-[100svh] overflow-hidden">
         {/* fundo: um pórtico de colunas (duas, espelhadas) nas laterais, pintado no azul da marca e
             apagado em degradê para o centro e para cima/baixo, então se funde ao fundo da página e
@@ -149,7 +147,7 @@ export default function Hero() {
           }}
         >
           <div className="ap-float">
-            <DeviceFrame semSombra aspecto="aspect-video" label="Demonstração dos sistemas da Forklin em vídeo">
+            <DeviceFrame semSombra aspecto="aspect-video" label="Demonstração do painel do usuário da Forklin em vídeo">
               <TelaVideo />
             </DeviceFrame>
           </div>
