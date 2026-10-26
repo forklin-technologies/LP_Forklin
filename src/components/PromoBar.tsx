@@ -17,8 +17,8 @@ const promoFont = localFont({
 // Pré-lançamento: 28/10/2026 à meia-noite (Brasília). Para mudar a data/vagas, é só aqui.
 const LAUNCH_AT = new Date("2026-10-28T00:00:00-03:00").getTime();
 const SPOTS = 10;
-// Link do formulário do pré-lançamento (ex.: Google Forms). Vazio = abre o "Fale conosco" da própria LP.
-const PRELAUNCH_FORM_URL = "";
+// Destino do botão "Faça parte do ecossistema Forklin". Vazio = abre o "Fale conosco" da própria LP.
+const PRELAUNCH_FORM_URL: string = "https://foreducation.forklin.com.br";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
