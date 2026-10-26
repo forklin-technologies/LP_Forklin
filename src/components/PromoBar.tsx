@@ -2,7 +2,9 @@
 
 import Image from "next/image";
 import localFont from "next/font/local";
+import { Caveat } from "next/font/google";
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 // 42dot Sans (Google Fonts, OFL) só com os caracteres latinos, usada nos textos da faixa.
 const promoFont = localFont({
@@ -13,6 +15,9 @@ const promoFont = localFont({
   ],
   display: "swap",
 });
+
+// Manuscrita só para o recado do cartão "ansioso?", pra ele soar mais pessoal que o resto da LP.
+const handFont = Caveat({ subsets: ["latin"], weight: ["600", "700"], display: "swap" });
 
 // Pré-lançamento: 28/10/2026 à meia-noite (Brasília). Para mudar a data/vagas, é só aqui.
 const LAUNCH_AT = new Date("2026-10-28T00:00:00-03:00").getTime();
@@ -43,6 +48,8 @@ function countdown(now: number) {
 export default function PromoBar() {
   const ref = useRef<HTMLDivElement>(null);
   const [closed, setClosed] = useState(false);
+  // cartão "ansioso?" que abre ao clicar no botão ainda travado
+  const [hint, setHint] = useState(false);
   // undefined = ainda não montou (evita diferença servidor/cliente); null = pré-lançamento já começou
   const [time, setTime] = useState<ReturnType<typeof countdown> | undefined>(undefined);
 
@@ -55,6 +62,13 @@ export default function PromoBar() {
       window.clearInterval(id);
     };
   }, []);
+
+  useEffect(() => {
+    if (!hint) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setHint(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [hint]);
 
   // Header fixo desce a altura da faixa que ainda aparece na tela (some ao rolar ou ao fechar).
   useEffect(() => {
@@ -166,11 +180,11 @@ export default function PromoBar() {
             </span>
           </a>
         ) : (
-          <div
-            role="link"
-            aria-disabled="true"
-            title="Liberado quando o contador zerar"
-            className="hidden cursor-not-allowed select-none items-center gap-2.5 justify-self-end rounded-full border border-white/15 bg-[#031a52]/30 py-1 pl-1 pr-4 lg:flex"
+          <button
+            type="button"
+            aria-haspopup="dialog"
+            onClick={() => setHint(true)}
+            className="hidden cursor-pointer select-none items-center gap-2.5 justify-self-end rounded-full border border-white/15 bg-[#031a52]/30 py-1 pl-1 pr-4 lg:flex"
           >
             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/70 text-xs font-bold text-[#0b2a8f]">
               {SPOTS}
@@ -184,7 +198,7 @@ export default function PromoBar() {
               <rect x="3.5" y="7" width="9" height="6.5" rx="1.5" />
               <path d="M5.5 7V5a2.5 2.5 0 015 0v2" />
             </svg>
-          </div>
+          </button>
         )}
       </div>
 
@@ -198,6 +212,49 @@ export default function PromoBar() {
           <path d="M3 3l10 10M13 3L3 13" />
         </svg>
       </button>
+
+      {hint &&
+        !started &&
+        createPortal(
+          <div
+            className="fixed inset-0 z-[200] flex items-center justify-center bg-[#031a52]/60 p-5 backdrop-blur-sm"
+            onClick={() => setHint(false)}
+          >
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="promo-hint-title"
+              onClick={(e) => e.stopPropagation()}
+              className={`${promoFont.className} relative w-full max-w-md rounded-3xl bg-white px-7 pb-7 pt-9 text-center text-[#0b1b4d] shadow-[0_30px_80px_-20px_rgba(3,26,82,0.55)]`}
+            >
+              <button
+                type="button"
+                autoFocus
+                onClick={() => setHint(false)}
+                aria-label="Fechar"
+                className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full text-[#0b1b4d]/50 transition hover:bg-[#0b1b4d]/10 hover:text-[#0b1b4d]"
+              >
+                <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden>
+                  <path d="M3 3l10 10M13 3L3 13" />
+                </svg>
+              </button>
+              <Image src="/images/logo-for-education.png" alt="For Education" width={1200} height={245} className="mx-auto h-11 w-auto" />
+              <p id="promo-hint-title" className={`${handFont.className} mt-6 text-5xl font-bold leading-none text-[#2451FF]`}>
+                Ansioso? A gente também!
+              </p>
+              <p className="mt-4 text-[15px] font-medium leading-relaxed text-[#0b1b4d]/80">
+                O For Education abre na <strong className="font-bold text-[#0b1b4d]">quarta-feira, 28/10</strong>, no pré-lançamento.
+                Volte aqui quando o contador zerar que o acesso é liberado.
+              </p>
+              {time && (
+                <p className="mt-5 inline-flex items-baseline gap-1.5 rounded-full bg-[#2451FF]/10 px-4 py-1.5 text-sm font-semibold tabular-nums text-[#1230B0]">
+                  Faltam {time.map((seg) => `${seg.n}${seg.u}`).join(" ")}
+                </p>
+              )}
+            </div>
+          </div>,
+          document.body,
+        )}
     </div>
   );
 }
