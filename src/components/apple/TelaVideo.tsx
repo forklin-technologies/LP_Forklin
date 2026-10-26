@@ -3,11 +3,11 @@
 // O vídeo que roda na tela dos notebooks da LP: mudo, em loop e sem controles (é a "tela" do
 // aparelho). Só toca enquanto está visível — fora da tela pausa (poupa bateria/CPU) — e com
 // "reduzir movimento" fica parado no primeiro quadro.
-// Cada notebook escolhe o seu vídeo: o hero usa o padrão (VIDEO_TELA, forklin-ecossistema.mp4) e o
+// Cada notebook escolhe o seu vídeo: o hero usa o padrão (VIDEO_TELA, forklin-ecossistema-site.mp4) e o
 // card do Diário Digital em For Education usa VIDEO_DIARIO.
 import { useEffect, useRef } from "react";
 
-export const VIDEO_TELA = "/videos/forklin-ecossistema.mp4";
+export const VIDEO_TELA = "/videos/forklin-ecossistema-site.mp4";
 export const VIDEO_DIARIO = "/videos/forklin-landing-loop.mp4";
 
 export default function TelaVideo({
