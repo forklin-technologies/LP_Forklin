@@ -160,46 +160,40 @@ export default function PromoBar() {
           </div>
         </div>
 
-        {/* direita: o botão do pré-lançamento. Travado (não é link) até o contador zerar. */}
-        {started ? (
-          <a
-            href={external ? PRELAUNCH_FORM_URL : "#fale-conosco"}
-            {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-            className="group hidden items-center gap-2.5 justify-self-end rounded-full border border-white/25 bg-[#031a52]/45 py-1 pl-1 pr-4 transition-colors hover:border-white/50 hover:bg-[#031a52]/70 lg:flex"
-          >
-            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-xs font-bold text-[#0b2a8f]">
-              {SPOTS}
-            </span>
-            <span className="whitespace-nowrap text-xs font-semibold text-white/95">
-              vagas ·{" "}
-              <span className="xl:hidden">Participe</span>
-              <span className="hidden xl:inline">Faça parte do ecossistema Forklin</span>
-            </span>
-            <span aria-hidden className="text-sm text-white/80 transition-transform duration-300 group-hover:translate-x-0.5">
-              &rarr;
-            </span>
-          </a>
-        ) : (
-          <button
-            type="button"
-            aria-haspopup="dialog"
-            onClick={() => setHint(true)}
-            className="hidden cursor-pointer select-none items-center gap-2.5 justify-self-end rounded-full border border-white/15 bg-[#031a52]/30 py-1 pl-1 pr-4 lg:flex"
-          >
-            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/70 text-xs font-bold text-[#0b2a8f]">
-              {SPOTS}
-            </span>
-            <span className="whitespace-nowrap text-xs font-semibold text-white/65">
-              vagas ·{" "}
-              <span className="xl:hidden">Em breve</span>
-              <span className="hidden xl:inline">Acesso liberado ao fim da contagem</span>
-            </span>
-            <svg viewBox="0 0 16 16" className="h-3.5 w-3.5 text-white/65" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-              <rect x="3.5" y="7" width="9" height="6.5" rx="1.5" />
-              <path d="M5.5 7V5a2.5 2.5 0 015 0v2" />
-            </svg>
-          </button>
-        )}
+        {/* direita: o botão do pré-lançamento. Tem a mesma cara antes e depois do contador zerar; antes,
+            o clique abre o cartão "ansioso?" em vez de ir para o For Education. */}
+        {(() => {
+          const pill =
+            "group hidden cursor-pointer items-center gap-2.5 justify-self-end rounded-full border border-white/25 bg-[#031a52]/45 py-1 pl-1 pr-4 transition-colors hover:border-white/50 hover:bg-[#031a52]/70 lg:flex";
+          const content = (
+            <>
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-xs font-bold text-[#0b2a8f]">
+                {SPOTS}
+              </span>
+              <span className="whitespace-nowrap text-xs font-semibold text-white/95">
+                vagas ·{" "}
+                <span className="xl:hidden">Participe</span>
+                <span className="hidden xl:inline">Faça parte do ecossistema Forklin</span>
+              </span>
+              <span aria-hidden className="text-sm text-white/80 transition-transform duration-300 group-hover:translate-x-0.5">
+                &rarr;
+              </span>
+            </>
+          );
+          return started ? (
+            <a
+              href={external ? PRELAUNCH_FORM_URL : "#fale-conosco"}
+              {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+              className={pill}
+            >
+              {content}
+            </a>
+          ) : (
+            <button type="button" aria-haspopup="dialog" onClick={() => setHint(true)} className={pill}>
+              {content}
+            </button>
+          );
+        })()}
       </div>
 
       <button
