@@ -3,6 +3,7 @@
 // da LP anterior, fonte Poppins, cards mais vivos e a logo 3D em destaque.
 // O formulário de contato (ContactModal, aberto por #fale-conosco…) é o mesmo da LP atual.
 import Header from "@/components/Header";
+import PromoBar from "@/components/PromoBar";
 import EcosystemCards from "@/components/EcosystemCards";
 import ContactModal from "@/components/ContactModal";
 import Hero from "@/components/apple/Hero";
@@ -16,6 +17,7 @@ export default function Home() {
   return (
     <div className="ap-page">
       <ThemeMorph />
+      <PromoBar />
       <Header />
       <main>
         <Hero />
