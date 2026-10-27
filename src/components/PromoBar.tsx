@@ -106,7 +106,7 @@ export default function PromoBar() {
   return (
     <div
       ref={ref}
-      className={`${promoFont.className} relative z-[49] h-[4.5rem] text-white sm:h-24`}
+      className={`${promoFont.className} relative z-[49] h-[6.75rem] text-white sm:h-[7rem] lg:h-24`}
     >
       {/* fundo em degradê (recorta o brilho que corre pela faixa) */}
       <div
@@ -121,7 +121,7 @@ export default function PromoBar() {
       </div>
 
       {/* 3 colunas: o contador fica sempre no centro da faixa, independente do que há nas laterais */}
-      <div className="relative mx-auto flex h-full max-w-[96rem] items-center justify-center px-11 sm:px-14 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:justify-items-start">
+      <div className="relative mx-auto flex h-full max-w-[96rem] flex-col items-center justify-center gap-2 px-11 sm:px-14 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:justify-items-start">
         {/* esquerda: logo + slogan soltos, sem cartão em volta */}
         <div className="hidden shrink-0 items-center gap-3 lg:-ml-8 lg:flex xl:-ml-10">
           <Image src="/images/logo-forklin-mark.png" alt="Forklin" width={402} height={446} className="h-14 w-auto" />
@@ -164,10 +164,10 @@ export default function PromoBar() {
             o clique abre o cartão "ansioso?" em vez de ir para o For Education. */}
         {(() => {
           const pill =
-            "group hidden cursor-pointer items-center gap-2.5 justify-self-end rounded-full border border-white/25 bg-[#031a52]/45 py-1 pl-1 pr-4 transition-colors hover:border-white/50 hover:bg-[#031a52]/70 lg:flex";
+            "group flex cursor-pointer items-center gap-2 justify-self-end rounded-full border border-white/25 bg-[#031a52]/45 py-0.5 pl-0.5 pr-3.5 transition-colors hover:border-white/50 hover:bg-[#031a52]/70 lg:gap-2.5 lg:py-1 lg:pl-1 lg:pr-4";
           const content = (
             <>
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-xs font-bold text-[#0b2a8f]">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-xs font-bold text-[#0b2a8f] lg:h-7 lg:w-7">
                 {SPOTS}
               </span>
               <span className="whitespace-nowrap text-xs font-semibold text-white/95">
