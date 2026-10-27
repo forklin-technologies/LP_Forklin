@@ -237,8 +237,8 @@ export default function PromoBar() {
                 Ansioso? A gente também!
               </p>
               <p className="mt-4 text-[15px] font-medium leading-relaxed text-[#0b1b4d]/80">
-                O For Education abre na <strong className="font-bold text-[#0b1b4d]">quarta-feira, 28/10</strong>, no pré-lançamento.
-                Volte aqui quando o contador zerar que o acesso é liberado.
+                O For Education abre na <strong className="font-bold text-[#0b1b4d]">quarta-feira, 28/10, à meia-noite</strong>.
+                Até lá o acesso fica fechado. Quando o contador chegar a zero, é só clicar no botão da barra e entrar.
               </p>
               {time && (
                 <p className="mt-5 inline-flex items-baseline gap-1.5 rounded-full bg-[#2451FF]/10 px-4 py-1.5 text-sm font-semibold tabular-nums text-[#1230B0]">
