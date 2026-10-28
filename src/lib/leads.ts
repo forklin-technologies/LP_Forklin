@@ -10,7 +10,7 @@ export const SEGMENTS: { value: Segment; label: string; desc: string }[] = [
 ];
 
 export const SYSTEMS: Record<Exclude<Segment, "b2b">, string[]> = {
-  education: ["Diário Digital", "Tutor IA", "Patrimônio"],
+  education: ["Diário Digital", "Biblioteca", "Tutor IA", "Patrimônio"],
   sales: ["CRM", "Gestão comercial", "Automações", "Operação de vendas", "IA comercial"],
 };
 
