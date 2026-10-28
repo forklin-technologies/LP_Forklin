@@ -2,9 +2,7 @@
 
 import Image from "next/image";
 import localFont from "next/font/local";
-import { Caveat } from "next/font/google";
 import { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
 
 // 42dot Sans (Google Fonts, OFL) só com os caracteres latinos, usada nos textos da faixa.
 const promoFont = localFont({
@@ -15,9 +13,6 @@ const promoFont = localFont({
   ],
   display: "swap",
 });
-
-// Manuscrita só para o recado do cartão "ansioso?", pra ele soar mais pessoal que o resto da LP.
-const handFont = Caveat({ subsets: ["latin"], weight: ["600", "700"], display: "swap" });
 
 // Pré-lançamento: 28/10/2026 à meia-noite (Brasília). Para mudar a data/vagas, é só aqui.
 const LAUNCH_AT = new Date("2026-10-28T00:00:00-03:00").getTime();
@@ -48,8 +43,6 @@ function countdown(now: number) {
 export default function PromoBar() {
   const ref = useRef<HTMLDivElement>(null);
   const [closed, setClosed] = useState(false);
-  // cartão "ansioso?" que abre ao clicar no botão ainda travado
-  const [hint, setHint] = useState(false);
   // undefined = ainda não montou (evita diferença servidor/cliente); null = pré-lançamento já começou
   const [time, setTime] = useState<ReturnType<typeof countdown> | undefined>(undefined);
 
@@ -62,13 +55,6 @@ export default function PromoBar() {
       window.clearInterval(id);
     };
   }, []);
-
-  useEffect(() => {
-    if (!hint) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setHint(false);
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [hint]);
 
   // Header fixo desce a altura da faixa que ainda aparece na tela (some ao rolar ou ao fechar).
   useEffect(() => {
@@ -160,40 +146,24 @@ export default function PromoBar() {
           </div>
         </div>
 
-        {/* direita: o botão do pré-lançamento. Tem a mesma cara antes e depois do contador zerar; antes,
-            o clique abre o cartão "ansioso?" em vez de ir para o For Education. */}
-        {(() => {
-          const pill =
-            "group flex cursor-pointer items-center gap-2 justify-self-end rounded-full border border-white/25 bg-[#031a52]/45 py-0.5 pl-0.5 pr-3.5 transition-colors hover:border-white/50 hover:bg-[#031a52]/70 lg:gap-2.5 lg:py-1 lg:pl-1 lg:pr-4";
-          const content = (
-            <>
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-xs font-bold text-[#0b2a8f] lg:h-7 lg:w-7">
-                {SPOTS}
-              </span>
-              <span className="whitespace-nowrap text-xs font-semibold text-white/95">
-                vagas ·{" "}
-                <span className="xl:hidden">Participe</span>
-                <span className="hidden xl:inline">Faça parte do ecossistema Forklin</span>
-              </span>
-              <span aria-hidden className="text-sm text-white/80 transition-transform duration-300 group-hover:translate-x-0.5">
-                &rarr;
-              </span>
-            </>
-          );
-          return started ? (
-            <a
-              href={external ? PRELAUNCH_FORM_URL : "#fale-conosco"}
-              {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-              className={pill}
-            >
-              {content}
-            </a>
-          ) : (
-            <button type="button" aria-haspopup="dialog" onClick={() => setHint(true)} className={pill}>
-              {content}
-            </button>
-          );
-        })()}
+        {/* direita: o botão do pré-lançamento leva direto ao For Education, antes e depois do contador zerar */}
+        <a
+          href={external ? PRELAUNCH_FORM_URL : "#fale-conosco"}
+          {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+          className="group flex cursor-pointer items-center gap-2 justify-self-end rounded-full border border-white/25 bg-[#031a52]/45 py-0.5 pl-0.5 pr-3.5 transition-colors hover:border-white/50 hover:bg-[#031a52]/70 lg:gap-2.5 lg:py-1 lg:pl-1 lg:pr-4"
+        >
+          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-xs font-bold text-[#0b2a8f] lg:h-7 lg:w-7">
+            {SPOTS}
+          </span>
+          <span className="whitespace-nowrap text-xs font-semibold text-white/95">
+            vagas ·{" "}
+            <span className="xl:hidden">Participe</span>
+            <span className="hidden xl:inline">Faça parte do ecossistema Forklin</span>
+          </span>
+          <span aria-hidden className="text-sm text-white/80 transition-transform duration-300 group-hover:translate-x-0.5">
+            &rarr;
+          </span>
+        </a>
       </div>
 
       <button
@@ -206,50 +176,6 @@ export default function PromoBar() {
           <path d="M3 3l10 10M13 3L3 13" />
         </svg>
       </button>
-
-      {hint &&
-        !started &&
-        createPortal(
-          <div
-            className="fixed inset-0 z-[200] flex items-center justify-center bg-[#031a52]/60 p-5 backdrop-blur-sm"
-            onClick={() => setHint(false)}
-          >
-            <div
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="promo-hint-title"
-              onClick={(e) => e.stopPropagation()}
-              className={`${promoFont.className} relative w-full max-w-md rounded-3xl bg-white px-7 pb-7 pt-9 text-center text-[#0b1b4d] shadow-[0_30px_80px_-20px_rgba(3,26,82,0.55)]`}
-            >
-              <button
-                type="button"
-                autoFocus
-                onClick={() => setHint(false)}
-                aria-label="Fechar"
-                className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full text-[#0b1b4d]/50 transition hover:bg-[#0b1b4d]/10 hover:text-[#0b1b4d]"
-              >
-                <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden>
-                  <path d="M3 3l10 10M13 3L3 13" />
-                </svg>
-              </button>
-              <Image src="/images/logo-for-education.png" alt="For Education" width={1200} height={245} className="mx-auto h-11 w-auto" />
-              <p id="promo-hint-title" className={`${handFont.className} mt-6 text-5xl font-bold leading-none text-[#2451FF]`}>
-                Ansioso? A gente também!
-              </p>
-              <p className="mt-4 text-base font-medium leading-snug text-[#0b1b4d]/80">
-                O For Education abre na <strong className="font-bold text-[#0b1b4d]">quarta-feira, 28/10</strong>.
-                <br />
-                Vem coisa boa por aí. Guarde a data!
-              </p>
-              {time && (
-                <p className="mt-5 inline-flex items-baseline gap-1.5 rounded-full bg-[#2451FF]/10 px-4 py-1.5 text-sm font-semibold tabular-nums text-[#1230B0]">
-                  Faltam {time.map((seg) => `${seg.n}${seg.u}`).join(" ")}
-                </p>
-              )}
-            </div>
-          </div>,
-          document.body,
-        )}
     </div>
   );
 }
