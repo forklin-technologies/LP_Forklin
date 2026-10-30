@@ -5,6 +5,9 @@ export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURICo
   "Olá! Vim pelo site da Forklin e gostaria de saber mais sobre as soluções.",
 )}`;
 
+// Porta de entrada do app (botão "Acessar" do header).
+export const APP_URL = "https://app.forklin.com.br";
+
 // TODO: preencher com os dados oficiais. Cada item só aparece no site quando tiver valor —
 // nada de link quebrado ou endereço inventado.
 export const INSTAGRAM_URL = "";

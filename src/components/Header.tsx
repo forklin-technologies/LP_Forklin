@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Logo from "./Logo";
-import { WHATSAPP_URL } from "@/lib/contact";
+import { APP_URL } from "@/lib/contact";
 
 const NAV_LINKS = [
   { label: "Soluções", href: "#segmentos" },
@@ -101,12 +101,10 @@ export default function Header() {
             </nav>
 
             <a
-              href={WHATSAPP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={APP_URL}
               className="hidden items-center gap-2 rounded-full bg-[var(--ap-accent)] px-6 py-3.5 text-sm font-semibold text-white shadow-[0_8px_20px_-8px_rgba(36,81,255,0.55)] transition hover:bg-[var(--ap-accent-hover)] lg:inline-flex"
             >
-              Entrar em contato
+              Acessar
               <span aria-hidden>&rarr;</span>
             </a>
 
@@ -168,9 +166,7 @@ export default function Header() {
                 </a>
               ))}
               <a
-                href={WHATSAPP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
+                href={APP_URL}
                 onClick={() => setOpen(false)}
                 className="mb-4 mt-3 inline-flex items-center justify-center gap-2 rounded-full bg-[var(--ap-accent)] px-5 py-3.5 text-sm font-semibold text-white transition-all duration-500 ease-[cubic-bezier(.16,1,.3,1)]"
                 style={{
@@ -181,7 +177,7 @@ export default function Header() {
                     : "0ms",
                 }}
               >
-                Entrar em contato
+                Acessar
                 <span aria-hidden>&rarr;</span>
               </a>
             </nav>
