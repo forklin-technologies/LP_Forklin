@@ -316,12 +316,7 @@ function FORKY(o) {
      ['Camila Ribeiro', 'Secretaria de escola', 'Importei os alunos por planilha e em minutos estava tudo cadastrado.', 15, 'há 2 d'],
      ['Thiago Barros', 'Vendedor externo', 'Atualizo o negócio pelo celular, na rua, sem voltar para a mesa.', 19, 'há 4 d'],
      ['Helena Duarte', 'Coordenadora pedagógica', 'Os alertas de frequência chegam antes de virar problema.', 33, 'há 6 d'],
-     ['Marcos Vieira', 'Responsável pelo patrimônio', 'Cada item com seu QR Code. Sei onde está e com quem.', 14, 'há 1 sem']],
-    [['Beatriz Moraes', 'Diretora', 'Menos papel, menos retrabalho. A equipe agradece.', 29, 'há 2 d'],
-     ['Gustavo Pinto', 'Gerente comercial', 'Os números do funil sem montar relatório na mão.', 16, 'há 3 d'],
-     ['Renata Freitas', 'Professora', 'Registro o conteúdo da aula na hora e o diário se completa sozinho.', 21, 'há 5 d'],
-     ['Paulo Mendes', 'Organizador de festa junina', 'O caixa fechou sem divergência pela primeira vez.', 25, 'há 1 sem'],
-     ['Larissa Campos', 'Bibliotecária', 'Empréstimo e devolução em dois toques. Acabou o caderno.', 13, 'há 1 sem']]
+     ['Marcos Vieira', 'Responsável pelo patrimônio', 'Cada item com seu QR Code. Sei onde está e com quem.', 14, 'há 1 sem']]
   ];
   var HEART = '<svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>';
   function fxCard(c, i, k) {

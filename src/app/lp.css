@@ -383,13 +383,11 @@ h1 .w { display: inline-block; }
 .fxr { position: relative; }
 .fxt { display: flex; width: max-content; animation: fxl 95s linear infinite; }
 .fxr.rev .fxt { animation-name: fxr; animation-duration: 110s; }
-.fxr.d3 .fxt { animation-duration: 130s; }
 @media (hover: hover) { .fxst:hover .fxt { animation-play-state: paused; } }
 @keyframes fxl { to { transform: translateX(-50%); } }
 @keyframes fxr { from { transform: translateX(-50%); } to { transform: none; } }
 .fxc { flex: none; width: 360px; margin-right: 20px; background: #fff; border: 1px solid #E6EAF2; border-radius: 22px; padding: 18px 20px 14px; box-shadow: 0 18px 34px -24px rgba(10, 20, 51, .35); transition: filter .4s, opacity .4s, transform .5s var(--spring), box-shadow .4s; position: relative; }
-.fxr.d2 .fxc { filter: blur(1.8px); opacity: .8; }
-.fxr.d3 .fxc { filter: blur(4px); opacity: .55; }
+.fxr.d2 .fxc { filter: blur(3px); opacity: .68; }
 .fxst .fxc:hover { filter: none; opacity: 1; transform: translateY(-5px) scale(1.02); box-shadow: 0 28px 46px -24px rgba(10, 20, 51, .45); z-index: 3; }
 .fxu { display: flex; align-items: center; gap: 12px; }
 .fxa { flex: none; width: 44px; height: 44px; border-radius: 50%; padding: 2.5px; background: conic-gradient(from 210deg, #475DFB, #10C7FC, #A7B4FF, #475DFB); display: block; }
@@ -704,7 +702,6 @@ h1 .w { display: inline-block; }
   .fxst { margin-top: 30px; }
   .fxr .fxt { animation-duration: 40s; }
   .fxr.rev .fxt { animation-duration: 46s; }
-  .fxr.d3 .fxt { animation-duration: 54s; }
 
   .fqs { padding: 70px 0 76px; }
   .fql h2 { font-size: 36px; line-height: 38px; }
