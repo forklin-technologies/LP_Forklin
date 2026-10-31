@@ -22,8 +22,8 @@ body {
   margin: 0; background: var(--surface); color: var(--ink); font-family: var(--font); -webkit-font-smoothing: antialiased;
   padding-inline: max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 0; overflow-x: hidden;
 }
-.fit { width: calc(1240px * var(--s)); height: calc(820px * var(--s)); margin: 0 auto; position: relative; }
-.stage { position: absolute; left: 0; top: 0; width: 1240px; height: 820px; transform: scale(var(--s)); transform-origin: 0 0; }
+.fit { width: calc(1240px * var(--s)); height: calc(800px * var(--s)); margin: 0 auto; position: relative; }
+.stage { position: absolute; left: 0; top: 0; width: 1240px; height: 800px; transform: scale(var(--s)); transform-origin: 0 0; }
 .abs { position: absolute; }
 
 .visbox, .vis, .s3vis { display: contents; }
@@ -62,22 +62,20 @@ h1 .w { display: inline-block; }
 .cta:hover { transform: translateY(-3px); box-shadow: 0 18px 30px -12px rgba(86, 71, 236, .7); }
 .cta:hover svg { transform: translateX(5px); }
 .cta:active { transform: translateY(0) scale(.98); }
-.fronts { left: 0; top: 672px; display: flex; flex-direction: column; gap: 14px; }
+.fronts { left: 0; top: 636px; display: flex; flex-direction: column; gap: 14px; }
 .fr-l { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #7A8399; }
 .fr-lg { display: flex; align-items: center; gap: 26px; }
 .fr-lg img { height: 34px; width: auto; display: block; }
 .fr-lg i { width: 1px; height: 28px; background: var(--line); }
 .run .fronts { animation: rise .8s var(--out) 1.8s both; }
-.micro { left: 0; top: 590px; font-size: 14px; line-height: 22px; letter-spacing: -.02em; color: var(--body); white-space: nowrap; }
-.micro b { color: var(--ink); font-weight: 600; }
-.hr { left: 0; top: 650px; width: 600px; height: 1px; background: var(--line); transform-origin: left; }
+.hr { left: 0; top: 614px; width: 600px; height: 1px; background: var(--line); transform-origin: left; }
 
 /* ---------- direita ---------- */
 .par { position: absolute; will-change: transform; }
-.p-art { left: 730px; top: 120px; width: 510px; height: 554px; filter: drop-shadow(0 30px 34px rgba(10, 20, 51, .26)); }
-.p-win { left: 570px; top: 432px; width: 580px; height: 320px; }
-.p-mas { left: 616px; top: 268px; width: 150px; height: 193px; }
-.p-fc { left: 986px; top: 146px; }
+.p-art { left: 730px; top: 100px; width: 510px; height: 554px; filter: drop-shadow(0 30px 34px rgba(10, 20, 51, .26)); }
+.p-win { left: 570px; top: 412px; width: 580px; height: 320px; }
+.p-mas { left: 616px; top: 248px; width: 150px; height: 193px; }
+.p-fc { left: 986px; top: 126px; }
 .art { width: 100%; height: 100%; overflow: hidden; }
 /* o painel (580x320, canto em -160,312 dentro do fundo) "abre" o fundo no próprio contorno: 4px de linha, cantos concêntricos */
 .art-c { width: 100%; height: 100%; background: #0A1433; clip-path: path('M36 0H474A36 36 0 0 1 510 36V518A36 36 0 0 1 474 554H424V328A20 20 0 0 0 404 308H0V36A36 36 0 0 1 36 0Z'); }
@@ -99,8 +97,8 @@ h1 .w { display: inline-block; }
 .fc .ck path { stroke-dasharray: 1; stroke-dashoffset: 0; }
 .fc b { display: block; font-size: 16px; line-height: 22px; font-weight: 600; letter-spacing: -.03em; }
 .fc span { display: block; font-size: 14px; line-height: 20px; color: var(--body); letter-spacing: -.01em; }
-.note { left: 910px; top: 756px; font-family: var(--hand); font-size: 22px; line-height: 26px; color: var(--ink); transform: rotate(4deg); white-space: nowrap; }
-.arrow { left: 848px; top: 752px; width: 60px; height: 46px; overflow: visible; }
+.note { left: 910px; top: 736px; font-family: var(--hand); font-size: 22px; line-height: 26px; color: var(--ink); transform: rotate(4deg); white-space: nowrap; }
+.arrow { left: 848px; top: 732px; width: 60px; height: 46px; overflow: visible; }
 .arrow path { fill: none; stroke: var(--ink); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 
 /* ---------- entrada (somente com .run) ---------- */
@@ -111,7 +109,6 @@ h1 .w { display: inline-block; }
 .run .chip { animation: pop .8s var(--spring) 1.15s both; }
 .run .para { animation: rise .9s var(--out) 1.25s both; }
 .run .cta { animation: rise .9s var(--out) 1.4s both; }
-.run .micro { animation: rise .8s var(--out) 1.55s both; }
 .run .hr { animation: draw-x 1s var(--out) 1.6s both; }
 .run .art { animation: artin 1.3s var(--out) .45s both; }
 .run .win { animation: winin 1.2s var(--out) 1.3s both; }
@@ -632,13 +629,12 @@ h1 .w { display: inline-block; }
   .roll .wd { line-height: 42px; }
   .para { width: 100%; margin-top: 20px; font-size: 16px; line-height: 26px; }
   .cta { margin-top: 24px; height: 50px; padding: 0 22px 0 26px; font-size: 16px; }
-  .micro { margin-top: 14px; white-space: normal; font-size: 13px; line-height: 20px; }
   .hr { width: 100%; margin-top: 30px; }
   .fronts { margin-top: 22px; }
   .fr-lg img { height: 30px; }
   .note, .arrow { display: none; }
   .visbox { display: block; position: relative; width: 100%; height: calc(640px * var(--vs)); margin-top: 34px; }
-  .vis { display: block; position: absolute; left: 0; top: 0; width: 1240px; height: 990px; transform-origin: 0 0; transform: scale(var(--vs)) translate(-560px, -120px); }
+  .vis { display: block; position: absolute; left: 0; top: 0; width: 1240px; height: 990px; transform-origin: 0 0; transform: scale(var(--vs)) translate(-560px, -100px); }
 
   /* seção 2 */
   .s2 { height: auto; padding-bottom: 56px; --hw: 30vw; }
