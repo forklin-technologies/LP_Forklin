@@ -420,4 +420,11 @@ function FORKY(o) {
   var sfoot = document.getElementById('sfoot'), navLogo = document.querySelector('.nav img');
   if (navLogo) document.getElementById('sfLogo').src = navLogo.src;
   if ('IntersectionObserver' in window && !reduce) { new IntersectionObserver(function (es) { if (es[0].isIntersecting) sfoot.classList.add('in'); }, { threshold: .15 }).observe(sfoot); } else { sfoot.classList.add('in'); }
+
+  /* ===== riscos de sublinhado: são desenhados quando entram na tela ===== */
+  var uls = [].slice.call(document.querySelectorAll('.uline'));
+  if ('IntersectionObserver' in window && !reduce) {
+    var uo = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('on'); uo.unobserve(e.target); } }); }, { threshold: .6 });
+    uls.forEach(function (u) { uo.observe(u); });
+  } else { uls.forEach(function (u) { u.classList.add('on'); }); }
 })();

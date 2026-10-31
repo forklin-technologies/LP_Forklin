@@ -1,0 +1,48 @@
+/* Páginas legais da LP (Termos de Uso e Política de Privacidade).
+   Estrutura da referência: coluna simples e estreita, título, data, seções numeradas e marcadores pequenos.
+   O menu é o mesmo da LP. */
+.lg { max-width: 1240px; margin: 0 auto; padding-bottom: 90px; }
+
+/* menu (igual ao da LP: logo + links à esquerda, Acessar e botão escuro à direita) */
+.lg-nav { display: flex; align-items: center; gap: 44px; height: 56px; margin-top: 14px; }
+.lg-nav img { width: 128px; height: 33px; display: block; }
+.lg-links { display: flex; gap: 30px; font-size: 15.5px; font-weight: 500; letter-spacing: -.03em; }
+.lg-links a, .lg-acts > a:not(.lg-cta) { position: relative; color: var(--ink); text-decoration: none; }
+.lg-links a::after { content: ""; position: absolute; left: 0; right: 0; bottom: -6px; height: 2px; border-radius: 2px; background: var(--cyan); transform: scaleX(0); transform-origin: left; transition: transform .35s var(--out); }
+.lg-links a:hover::after { transform: scaleX(1); }
+.lg-acts { display: flex; align-items: center; gap: 26px; margin-left: auto; font-size: 15.5px; font-weight: 500; letter-spacing: -.03em; }
+.lg-cta { display: inline-flex; align-items: center; gap: 14px; background: var(--ink); color: #fff; padding: 7px 7px 7px 18px; border-radius: 13px; font-size: 14.5px; font-weight: 600; line-height: 22px; letter-spacing: -.02em; text-decoration: none; transition: transform .25s var(--out), box-shadow .25s; }
+.lg-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 22px -10px rgba(10, 20, 51, .55); }
+.lg-cta .ar { width: 28px; height: 28px; border-radius: 9px; background: rgba(255, 255, 255, .16); display: grid; place-items: center; }
+.lg-cta .ar svg { width: 14px; height: 14px; fill: none; stroke: #fff; stroke-width: 2.3; stroke-linecap: round; stroke-linejoin: round; transition: transform .3s var(--out); }
+.lg-cta:hover .ar svg { transform: translateX(2px); }
+.lg-links a:focus-visible, .lg-acts a:focus-visible, .lg-foot a:focus-visible { outline: 2px solid var(--chip-ink); outline-offset: 3px; border-radius: 4px; }
+
+/* documento */
+.lg-main { max-width: 700px; margin: 84px auto 0; padding-inline: 4px; }
+.lg-main h1 { margin: 0; font-size: 44px; line-height: 48px; font-weight: 600; letter-spacing: -.06em; color: var(--ink); }
+.lg-up { margin: 14px 0 30px; font-size: 14.5px; line-height: 22px; color: #6B7590; letter-spacing: -.01em; }
+
+/* texto do documento: pode ser selecionado e copiado (a LP inteira desliga a seleção) */
+.lg-doc { -webkit-user-select: text; user-select: text; }
+.lg-doc p { margin: 0 0 18px; font-size: 15px; line-height: 25px; color: #2B3350; letter-spacing: -.01em; }
+.lg-doc h2 { margin: 44px 0 16px; font-size: 24px; line-height: 30px; font-weight: 600; letter-spacing: -.05em; color: var(--ink); }
+.lg-doc > :first-child { margin-top: 0; }
+.lg-doc ul { margin: 0 0 18px; padding-left: 4px; list-style: none; }
+.lg-doc li { position: relative; margin: 0 0 8px; padding-left: 20px; font-size: 15px; line-height: 25px; color: #2B3350; letter-spacing: -.01em; }
+.lg-doc li::before { content: ""; position: absolute; left: 4px; top: 11px; width: 4px; height: 4px; border-radius: 50%; background: #2B3350; }
+.lg-doc strong { color: var(--ink); font-weight: 600; }
+.lg-doc a { color: var(--chip-ink); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+
+.lg-foot { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 64px; padding-top: 22px; border-top: 1px solid var(--line); font-size: 13.5px; color: #7A8399; letter-spacing: -.01em; }
+.lg-foot a { color: var(--ink); font-weight: 600; text-decoration: none; border-bottom: 1.5px solid var(--cyan); padding-bottom: 2px; }
+
+@media (max-width: 760px) {
+  .lg-nav { height: 52px; margin-top: 10px; gap: 0; justify-content: space-between; }
+  .lg-links, .lg-acts > a:not(.lg-cta) { display: none; }
+  .lg-cta { padding: 6px 6px 6px 14px; gap: 10px; font-size: 13px; }
+  .lg-main { margin-top: 48px; }
+  .lg-main h1 { font-size: 34px; line-height: 38px; }
+  .lg-doc h2 { font-size: 21px; margin-top: 34px; }
+  .lg-foot { flex-direction: column; align-items: flex-start; }
+}
