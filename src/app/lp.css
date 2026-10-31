@@ -482,6 +482,11 @@ h1 .w { display: inline-block; }
 .sf-c li { margin: 0; }
 .sf-c a { display: inline-block; padding: 4px 0; font-size: 15.5px; line-height: 24px; letter-spacing: -.015em; color: rgba(255, 255, 255, .66); text-decoration: none; transition: color .2s, transform .3s var(--out); }
 .sf-c a:hover { color: #fff; transform: translateX(4px); }
+/* redes sociais em ícone (o WhatsApp fica como número clicável) */
+.sf-soc { display: flex; gap: 10px; margin: 12px 0 14px; }
+.sf-c .sf-soc a { display: grid; place-items: center; width: 38px; height: 38px; padding: 0; border-radius: 12px; background: rgba(255, 255, 255, .08); border: 1px solid rgba(255, 255, 255, .1); color: rgba(255, 255, 255, .78); transition: background .25s, color .25s, transform .3s var(--out), border-color .25s; }
+.sf-c .sf-soc a:hover { background: var(--cyan); border-color: var(--cyan); color: var(--ink); transform: translateY(-3px); }
+.sf-soc svg { width: 18px; height: 18px; display: block; }
 .sf-c a:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; border-radius: 4px; }
 .sf-b { display: flex; align-items: center; gap: 28px; margin-top: 64px; padding-top: 28px; border-top: 1px solid rgba(255, 255, 255, .12); font-size: 13.5px; color: rgba(255, 255, 255, .5); letter-spacing: -.01em; }
 .sf-b img { height: 30px; width: auto; filter: brightness(0) invert(1); opacity: .95; }

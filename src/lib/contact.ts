@@ -10,8 +10,9 @@ export const APP_URL = "https://app.forklin.com.br";
 
 // TODO: preencher com os dados oficiais. Cada item só aparece no site quando tiver valor —
 // nada de link quebrado ou endereço inventado.
-export const INSTAGRAM_URL = "https://instagram.com/forklinbr";
-export const YOUTUBE_URL = "";
+export const INSTAGRAM_URL = "https://www.instagram.com/forklinbr/";
+export const YOUTUBE_URL = "https://www.youtube.com/@forklin-solutions";
+export const LINKEDIN_URL = "https://www.linkedin.com/company/145275248";
 export const CONTACT_EMAIL = "contato@forklin.com.br";
 export const TERMS_URL = "";
 export const PRIVACY_URL = "";
