@@ -428,18 +428,4 @@ function FORKY(o) {
   var sfoot = document.getElementById('sfoot'), navLogo = document.querySelector('.nav img');
   if (navLogo) document.getElementById('sfLogo').src = navLogo.src;
   if ('IntersectionObserver' in window && !reduce) { new IntersectionObserver(function (es) { if (es[0].isIntersecting) sfoot.classList.add('in'); }, { threshold: .15 }).observe(sfoot); } else { sfoot.classList.add('in'); }
-
-  /* ===== controles ===== */
-  var rp = document.getElementById('replay');
-  if (rp) rp.addEventListener('click', function () {
-    stage.classList.remove('run'); void stage.offsetWidth; stage.classList.add('run');
-    t0 = performance.now(); offset = 0; window.scrollTo({ top: 0, behavior: 'smooth' }); startChip();
-    if (paused) document.getElementById('pause').click();
-  });
-  var pb = document.getElementById('pause');
-  pb.addEventListener('click', function () {
-    paused = !paused; pb.setAttribute('aria-pressed', String(paused)); pb.textContent = paused ? 'Retomar movimento' : 'Pausar movimento';
-    if (paused) { root.setAttribute('data-paused', ''); pausedAt = performance.now(); }
-    else { root.removeAttribute('data-paused'); offset += (performance.now() - pausedAt) / 1000; }
-  });
 })();
