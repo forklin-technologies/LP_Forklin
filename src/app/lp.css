@@ -384,7 +384,7 @@ h1 .w { display: inline-block; }
 .fxt { display: flex; width: max-content; animation: fxl 95s linear infinite; }
 .fxr.rev .fxt { animation-name: fxr; animation-duration: 110s; }
 .fxr.d3 .fxt { animation-duration: 130s; }
-.fxst:hover .fxt { animation-play-state: paused; }
+@media (hover: hover) { .fxst:hover .fxt { animation-play-state: paused; } }
 @keyframes fxl { to { transform: translateX(-50%); } }
 @keyframes fxr { from { transform: translateX(-50%); } to { transform: none; } }
 .fxc { flex: none; width: 360px; margin-right: 20px; background: #fff; border: 1px solid #E6EAF2; border-radius: 22px; padding: 18px 20px 14px; box-shadow: 0 18px 34px -24px rgba(10, 20, 51, .35); transition: filter .4s, opacity .4s, transform .5s var(--spring), box-shadow .4s; position: relative; }
@@ -402,7 +402,12 @@ h1 .w { display: inline-block; }
 .fxf .lk { display: inline-flex; align-items: center; gap: 6px; }
 .fxf svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
 .fxf .lk.on { color: #E24D7B; } .fxf .lk.on svg { fill: #E24D7B; stroke: #E24D7B; }
-@media (prefers-reduced-motion: reduce) { .fxt { animation: none !important; } }
+@media (prefers-reduced-motion: reduce) {
+  .fxt { animation: none !important; }
+  .fxr { overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .fxr::-webkit-scrollbar { display: none; }
+  .fxst { -webkit-mask-image: none; mask-image: none; }
+}
 /* ---------- seção 6: FAQ ---------- */
 .fqs { position: relative; width: 100vw; margin-left: calc(50% - 50vw); overflow-x: clip; padding: 110px 0 120px; }
 .fqin { max-width: 1240px; margin: 0 auto; padding-inline: 16px; display: grid; grid-template-columns: 400px 1fr; gap: 90px; align-items: start; }
@@ -697,6 +702,9 @@ h1 .w { display: inline-block; }
   .fxh h2 { font-size: 32px; line-height: 35px; }
   .fxc { width: 290px; margin-right: 14px; }
   .fxst { margin-top: 30px; }
+  .fxr .fxt { animation-duration: 40s; }
+  .fxr.rev .fxt { animation-duration: 46s; }
+  .fxr.d3 .fxt { animation-duration: 54s; }
 
   .fqs { padding: 70px 0 76px; }
   .fql h2 { font-size: 36px; line-height: 38px; }
@@ -730,12 +738,3 @@ h1 .w { display: inline-block; }
 html { scroll-behavior: smooth; }
 /* texto da LP não é selecionável (pedido do usuário na LP anterior) */
 body { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
-
-/* ---------- riscos de sublinhado desenhados à mão (só em alguns títulos) ---------- */
-.uline { position: relative; display: inline-block; white-space: nowrap; }
-.uline svg { position: absolute; left: -2%; bottom: -.15em; width: 104%; height: .42em; overflow: visible; pointer-events: none; }
-.uline svg path { fill: none; stroke: var(--cyan); stroke-width: 2.6; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
-.uline.on svg path { animation: ulDraw .9s var(--out) forwards; }
-.uline.on svg path + path { animation-delay: .22s; animation-duration: .7s; }
-@keyframes ulDraw { to { stroke-dashoffset: 0; } }
-@media (prefers-reduced-motion: reduce) { .uline svg path { stroke-dashoffset: 0; animation: none !important; } }
