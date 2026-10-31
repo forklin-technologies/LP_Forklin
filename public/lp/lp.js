@@ -135,19 +135,11 @@ function FORKY(o) {
     ctx.putImageData(img, 0, 0);
   }
 
-  /* ===== laço principal: arte, profundidade do mouse, rolagem ===== */
-  var t0 = performance.now(), last = 0, raf = 0, paused = false, mx = 0, my = 0, sx = 0, sy = 0, scr = 0, pausedAt = 0, offset = 0;
-  stage.addEventListener('pointermove', function (e) {
-    var r = fit.getBoundingClientRect(); mx = clamp(((e.clientX - r.left) / r.width) * 2 - 1, -1, 1); my = clamp(((e.clientY - r.top) / r.height) * 2 - 1, -1, 1);
-  });
-  stage.addEventListener('pointerleave', function () { mx = 0; my = 0; });
-  window.addEventListener('scroll', function () { scr = clamp(window.scrollY / 600, 0, 1); }, { passive: true });
+  /* ===== laço principal: só a arte do horizonte (sem profundidade por mouse ou rolagem) ===== */
+  var t0 = performance.now(), last = 0, raf = 0, paused = false, pausedAt = 0, offset = 0;
   function loop(now) {
     raf = requestAnimationFrame(loop);
     if (paused) return;
-    sx += (mx - sx) * .06; sy += (my - sy) * .06;
-    stage.style.setProperty('--px', sx.toFixed(3)); stage.style.setProperty('--py', sy.toFixed(3));
-    stage.style.setProperty('--sp', (reduce ? 0 : scr).toFixed(3));
     if (now - last > 46) { last = now; draw((now - t0) / 1000 - offset); }
   }
   if (reduce) { draw(99); } else { raf = requestAnimationFrame(loop); }
