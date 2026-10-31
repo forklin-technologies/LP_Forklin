@@ -704,7 +704,8 @@ h1 .w { display: inline-block; }
   .fxr.rev .fxt { animation-duration: 46s; }
 
   .fqs { padding: 70px 0 76px; }
-  .fql h2 { font-size: 36px; line-height: 38px; }
+  /* o garfo fica ao lado do título: o título reserva o espaço dele e sempre quebra antes de chegar nele */
+  .fql h2 { font-size: 36px; line-height: 38px; padding-right: 96px; }
   .fqm { width: 80px; height: 120px; }
   .fqq { padding: 18px 18px; font-size: 15.5px; line-height: 22px; gap: 12px; }
   .fqa p { padding: 0 18px 20px; font-size: 15px; line-height: 24px; }
