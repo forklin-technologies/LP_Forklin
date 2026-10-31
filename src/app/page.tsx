@@ -1,39 +1,27 @@
-// LP no estilo apple.com (branch design/estilo-apple) — feita com a skill apple-design
-// (.claude/skills/apple-design*), com os pedidos do usuário por cima: header e seção do robô
-// da LP anterior, fonte Poppins, cards mais vivos e a logo 3D em destaque.
-// O formulário de contato (ContactModal, aberto por #fale-conosco…) é o mesmo da LP atual.
-import Header from "@/components/Header";
-import PromoBar from "@/components/PromoBar";
-import EcosystemCards from "@/components/EcosystemCards";
-import ContactModal from "@/components/ContactModal";
-import Hero from "@/components/apple/Hero";
-import Highlights from "@/components/apple/Highlights";
-import Biblioteca from "@/components/apple/Biblioteca";
-import SalesDark from "@/components/apple/SalesDark";
-import B2BSection from "@/components/apple/B2BSection";
-import { FinalCTA, FooterApple } from "@/components/apple/FinalCTA";
-import ThemeMorph from "@/components/apple/ThemeMorph";
+// LP do ecossistema Forklin (v2): hero com o painel real, "1 conta", do improviso ao sistema,
+// as duas frentes, FAQ, orçamento sob medida e rodapé.
+//
+// O conteúdo vive em arquivos próprios, fáceis de editar:
+//   src/landing/body.html  → a estrutura (HTML) de todas as seções
+//   src/app/lp.css         → o visual (carregado no layout)
+//   public/lp/lp.js        → as animações e a interação (rolagem, FAQ, orçamento via WhatsApp)
+//   public/lp/*            → imagens e logos
+// A página é gerada estática no build; o HTML já vai pronto para o Google e para quem não tem JavaScript.
+//
+// A LP anterior (estilo Apple, com barra de pré-lançamento e formulário de contato) continua no
+// histórico do Git (último commit antes desta versão: 48e1752) e seus componentes seguem em
+// src/components, sem uso.
+import fs from "node:fs";
+import path from "node:path";
+import Script from "next/script";
+
+const html = fs.readFileSync(path.join(process.cwd(), "src/landing/body.html"), "utf8");
 
 export default function Home() {
   return (
-    <div className="ap-page">
-      <ThemeMorph />
-      <PromoBar />
-      <Header />
-      <main>
-        <Hero />
-        {/* sobe por cima do fim do hero: o notebook sai enquanto a próxima seção já chega (sem tela em branco) */}
-        <div data-theme-section="light" className="relative z-10 -mt-[55svh]">
-          <EcosystemCards />
-        </div>
-        <Highlights />
-        <Biblioteca />
-        <SalesDark />
-        <B2BSection />
-        <FinalCTA />
-      </main>
-      <FooterApple />
-      <ContactModal />
-    </div>
+    <>
+      <div id="fk-lp" dangerouslySetInnerHTML={{ __html: html }} />
+      <Script src="/lp/lp.js" strategy="afterInteractive" />
+    </>
   );
 }
