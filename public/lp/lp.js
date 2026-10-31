@@ -60,7 +60,8 @@ function FORKY(o) {
   /* escala do palco (o desenho aprovado tem 1240px de conteúdo) */
   function fitScale() {
     var cs = getComputedStyle(document.body), w = document.body.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
-    root.style.setProperty('--s', Math.min(1, w / 1240).toFixed(4));
+    var byH = Math.max(.7, Math.min(1, window.innerHeight / 820));
+    root.style.setProperty('--s', Math.min(w / 1240, byH, 1).toFixed(4));
     root.style.setProperty('--vs', Math.min(1, w / 720).toFixed(4));
     root.style.setProperty('--s3s', Math.min(1, w / 758).toFixed(4));
   }
